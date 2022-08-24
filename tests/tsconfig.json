@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig.json",
+    "references": [
+        {
+            "name": "deep.js",
+            "path": ".."
+        }
+    ],
+    "compilerOptions": {
+        "types": ["jest"],
+        "rootDir": "..",
+        "noEmit": true
+    },
+    "include": ["."]
+}

@@ -36,6 +36,7 @@ Modify `tsconfig.json`:
 ```jsonc
 {
   "compilerOptions": {
+    "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
     "target": "ES2018",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "commonjs",                                /* Specify what module code is generated. */
     "rootDir": "src",                                  /* Specify the root folder within your source files. */
@@ -124,3 +125,40 @@ Select:
 9. Add `jest`
 
 `yarn add -D jest @types/jest @babel/preset-env @babel/preset-typescript`
+
+Add folder `tests` under root dir.
+
+Inside `tests` folder, create `tsconfig.json` file:
+
+```json
+{
+    "extends": "../tsconfig.json",
+    "references": [
+        {
+            "name": "deep.js",
+            "path": ".."
+        }
+    ],
+    "compilerOptions": {
+        "types": ["jest"],
+        "rootDir": "..",
+        "noEmit": true
+    },
+    "include": ["."]
+}
+```
+
+Create `.babelrc` file under root folder:
+
+```json
+{
+    "presets": [
+        ["@babel/preset-env", {"targets": {"node": 10}}],
+        "@babel/preset-typescript"
+    ]
+}
+```
+
+You might need to restart ESLint server in VSCode:
+
+`CMD + Shift + P` -> "Restart ESLint server"
