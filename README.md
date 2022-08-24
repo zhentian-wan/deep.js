@@ -10,6 +10,7 @@ A light weight Javascript/Typescript library for nested object operations
 3. Edit `package.json` to tell what is the entry file & types information
 
     3.1 Entry file: `"main": "dist/index.js",`
+    
     3.2 Types: `"types": "dist/index.d.ts",`
 
 4. Add "scripts":
