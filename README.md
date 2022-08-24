@@ -48,7 +48,7 @@ Modify `tsconfig.json`:
     "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
     "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
     "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
-    "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return 
+    "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return */
   },
   "include": ["src"]
 }
