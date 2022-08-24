@@ -53,4 +53,74 @@ Modify `tsconfig.json`:
   "include": ["src"]
 }
 ```
+7 .ESlint setup: `yarn eslint --init`
 
+Select:
+
+* `To check syntax and find problems`
+
+* `None of these`
+
+* `None of these`
+
+* `Typescript`
+
+* `Node`
+
+* `JSON`
+
+* `Yes`
+
+* `yarn`
+
+`.eslintc.json` file:
+
+```json
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "overrides": [
+        {
+            "files": ["tests/**/*.ts"],
+            "env": {"jest": true, "node": true}
+        }
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "project": "tsconfig.eslint.json"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "prefer-const": "error",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-params": "off"
+    }
+}
+
+```
+
+8. Create a file `tsconfig.eslint.json` for jest:
+
+```json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "types": ["jest"]
+    },
+    "include": ["src", "tests"]
+}
+```
+
+9. Add `jest`
+
+`yarn add -D jest @types/jest @babel/preset-env @babel/preset-typescript`

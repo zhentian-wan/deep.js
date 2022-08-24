@@ -40,3 +40,21 @@
     const sum = a + b;
     return sum;
   }
+
+  /**
+   * Deep freeze nested object
+   * 
+   * @param obj - object to be freezed
+   * @public
+   */
+  export function deepFreeze (obj: {[K: string]: Primitive | object}) {
+    Object.keys(obj).forEach((prop) => {
+      if (typeof obj[prop] === 'object' && !Object.isFrozen(obj[prop])) {
+        deepFreeze(obj[prop] as {[K: string]: Primitive | object})
+      }
+    });
+    return Object.freeze(obj);
+  }
+
+
+  export type Primitive = string | number | boolean | null;
