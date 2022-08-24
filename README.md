@@ -161,4 +161,6 @@ Create `.babelrc` file under root folder:
 
 You might need to restart ESLint server in VSCode:
 
-`CMD + Shift + P` -> "Restart ESLint server"
+`CMD + Shift + P` -> "Restart ESLint server".
+
+
