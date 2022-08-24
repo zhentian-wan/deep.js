@@ -23,7 +23,7 @@ A light weight Javascript/Typescript library for nested object operations
   }
 ```
 
-5. Pin the `Node.js` & `yarn` versions using `volta`.
+5. Pin the `Node.js` & `yarn` versions using `[volta](https://volta.sh/)`. 
 
 ```bash
 volta pin node yarn
