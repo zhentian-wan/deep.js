@@ -163,4 +163,23 @@ You might need to restart ESLint server in VSCode:
 
 `CMD + Shift + P` -> "Restart ESLint server".
 
+10. Document
 
+`yarn add -D @microsoft/api-extractor @microsoft/api-documenter`
+
+11. API-extractor
+
+`yarn api-extractor init`
+
+Modify `api-extractor.json`:
+
+```json diff
+  "mainEntryPointFilePath": "<projectFolder>/dist/index.d.ts",
+  "untrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>-private.d.ts",
+  "betaTrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>-beta.d.ts",
+  "publicTrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>.d.ts"
+```
+
+Run `mkdir etc` to create a `etc` folder
+
+Run `yarn api-extractor run --local`
