@@ -187,3 +187,8 @@ Run `yarn api-extractor run --local`
 If @jsdoc has marked `@beta`, that will be include into `beta.d.ts`
 
 If @jsdoc has marked `@interal`, that will be include into `private.d.ts`
+
+
+12. API-documenter
+
+Run `yarn api-documenter markdown -i temp -o docs`
