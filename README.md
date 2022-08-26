@@ -191,4 +191,4 @@ If @jsdoc has marked `@interal`, that will be include into `private.d.ts`
 
 12. API-documenter
 
-Run `yarn api-documenter markdown -i temp -o docs`
+Run `yarn api-documenter markdown -i temp -o docs` output markdown to docs folder
