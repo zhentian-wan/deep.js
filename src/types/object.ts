@@ -13,6 +13,40 @@ type DeepPartialObject<T> = {
 }
 
 /*
+Example
+interface User {
+  name: string
+  age: number
+  address: string
+}
+
+interface UserPartialName {
+  name?: string
+  age: number
+  address: string
+}
+
+interface UserPartialNameAndAge {
+  name?: string
+  age?: number
+  address: string
+}
+type cases = [
+  Expect<Equal<PartialByKeys<User, 'name'>, UserPartialName>>,
+  Expect<Equal<PartialByKeys<User, 'name' | 'age'>, UserPartialNameAndAge>>,
+  Expect<Equal<PartialByKeys<User>, Partial<User>>>,
+  // @ts-expect-error
+  Expect<Equal<PartialByKeys<User, 'name' | 'unknown'>, UserPartialName>>,
+]
+*/
+export type PartialByKeys<T, K extends keyof T = keyof T> = MergeObject<
+  Omit<T, K> & {
+  [P in keyof T as P extends K ? P : never]?: T[P];
+}>;
+
+export type MergeObject<T> = { [P in keyof T]: T[P] };
+
+/*
 Example: 
 interface Model {
   name: string
@@ -30,3 +64,5 @@ type cases = [
 export type PickByType<T extends object, U> = {
   [Key in keyof T as T[Key] extends U ? Key: never]: T[Key]
 }
+
+
