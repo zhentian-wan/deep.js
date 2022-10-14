@@ -65,4 +65,37 @@ export type PickByType<T extends object, U> = {
   [Key in keyof T as T[Key] extends U ? Key: never]: T[Key]
 }
 
+/*
+Example
+interface User {
+  name?: string
+  age?: number
+  address?: string
+}
+
+interface UserRequiredName {
+  name: string
+  age?: number
+  address?: string
+}
+
+interface UserRequiredNameAndAge {
+  name: string
+  age: number
+  address?: string
+}
+
+type cases = [
+  Expect<Equal<RequiredByKeys<User, 'name'>, UserRequiredName>>,
+  Expect<Equal<RequiredByKeys<User, 'name' | 'age'>, UserRequiredNameAndAge>>,
+  Expect<Equal<RequiredByKeys<User>, Required<User>>>,
+  // @ts-expect-error
+  Expect<Equal<RequiredByKeys<User, 'name' | 'unknown'>, UserRequiredName>>,
+]
+*/
+export type RequiredByKeys<T, K extends keyof T = keyof T> = MergeObject<
+  Omit<T, K> & {
+    [Key in keyof T as Key extends K ? Key: never]-?: T[Key]
+  }
+>
 
