@@ -147,3 +147,24 @@ export type Mutable<T extends object> = {
   -readonly [K in keyof T]: T[K]
 }
 
+/*
+Example
+interface Model {
+  name: string
+  age: number
+  locations: string[] | null
+}
+
+type ModelEntries = ['name', string] | ['age', number] | ['locations', string[] | null]
+
+type cases = [
+  Expect<Equal<ObjectEntries<Model>, ModelEntries>>,
+  Expect<Equal<ObjectEntries<Partial<Model>>, ModelEntries>>,
+  Expect<Equal<ObjectEntries<{ key?: undefined }>, ['key', undefined]>>,
+  Expect<Equal<ObjectEntries<{ key: undefined }>, ['key', undefined]>>,
+]
+*/
+export type ObjectEntries<T extends object> = {
+  [Key in keyof T]-?: Key extends keyof T ? [Key, T[Key] extends undefined ? undefined: Required<T>[Key]]: never
+}[keyof T]
+
