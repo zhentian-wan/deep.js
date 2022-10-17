@@ -10,3 +10,17 @@ type cases = [
 ]
 */
 export type Shift<T extends any[], ACC = T> = T extends [infer REMOVED, ...(infer REST)] ? REST: [];
+
+
+/*
+Example
+type cases = [
+  Expect<Equal<TupleToNestedObject<['a'], string>, { a: string }>>,
+  Expect<Equal<TupleToNestedObject<['a', 'b'], number>, { a: { b: number } }>>,
+  Expect<Equal<TupleToNestedObject<['a', 'b', 'c'], boolean>, { a: { b: { c: boolean } } }>>,
+  Expect<Equal<TupleToNestedObject<[], boolean>, boolean>>,
+]
+*/
+export type TupleToNestedObject<T extends any[], U> = T extends [infer A extends string, ...(infer REST)]
+  ? {[Key in A]: TupleToNestedObject<REST, U>}
+  : U;
