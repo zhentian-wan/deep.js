@@ -24,3 +24,15 @@ type cases = [
 export type TupleToNestedObject<T extends any[], U> = T extends [infer A extends string, ...(infer REST)]
   ? {[Key in A]: TupleToNestedObject<REST, U>}
   : U;
+
+
+/*
+Example
+type cases = [
+  Expect<Equal<Reverse<[]>, []>>,
+  Expect<Equal<Reverse<['a', 'b']>, ['b', 'a']>>,
+  Expect<Equal<Reverse<['a', 'b', 'c']>, ['c', 'b', 'a']>>,
+]
+*/
+export type Reverse<T> = T extends [...infer H, infer T] ? [T, ...Reverse<H>] : [];
+
