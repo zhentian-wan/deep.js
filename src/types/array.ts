@@ -1,6 +1,22 @@
 /*
 Example
 type cases = [
+  Expect<Equal<Flatten<[]>, []>>,
+  Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
+  Expect<Equal<Flatten<[1, [2]]>, [1, 2]>>,
+  Expect<Equal<Flatten<[1, 2, [3, 4], [[[5]]]]>, [1, 2, 3, 4, 5]>>,
+  Expect<Equal<Flatten<[{ foo: 'bar'; 2: 10 }, 'foobar']>, [{ foo: 'bar'; 2: 10 }, 'foobar']>>,
+]
+*/
+export type Flatten<T> = T extends []
+  ? []
+  : T extends [infer H, ...infer T]
+    ? [...Flatten<H>, ...Flatten<T>]
+    : [T];
+
+/*
+Example
+type cases = [
   Expect<Equal<First<[3, 2, 1]>, 3>>,
   Expect<Equal<First<[() => 123, { a: string }]>, () => 123>>,
   Expect<Equal<First<[]>, never>>,
