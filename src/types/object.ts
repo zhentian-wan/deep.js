@@ -13,6 +13,30 @@ type DeepPartialObject<T> = {
 }
 
 /*
+Example:
+export type Obj = {
+  a: "a";
+  a2: "a2";
+  a3: "a3";
+  b: "b";
+  b1: "b1";
+  b2: "b2";
+  12: "12";
+};
+type KeyStartsWithA = KeyStartsWith<Obj, `a${string}`>; // "a" | "a2" | "a3"
+type KeyStartsWithNumber = KeyStartsWith<Obj, number>; // "12"
+type KeyStartsWithNumber2 = KeyStartsWith<[123, 321], number>; // 123 | 321
+type errorCase = KeyStartsWith<123, number>; // never
+*/
+export type KeyStartsWith<
+  Obj extends Record<PropertyKey, any>,
+  Matcher extends string | number | symbol,
+  _ExtractedKey extends keyof Obj = Extract<keyof Obj, Matcher>
+> = {
+  [K in _ExtractedKey]: Obj[K];
+}[_ExtractedKey];
+
+/*
 Example
 interface User {
   name: string
