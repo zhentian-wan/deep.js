@@ -20,5 +20,11 @@ type cases = [
   Expect<Equal<EndsWith<'abc', 'd'>, false>>,
 ]
 */
-export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true: false
+export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true: false;
+
+/*
+Example:
+StringToUnion<"ABC"> = "" | "A" | "B" | "C"
+*/
+export type StringToUnion<S extends string> = S extends `${infer A}${infer B}` ? A | StringToUnion<B>: '';
 
