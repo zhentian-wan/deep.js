@@ -56,3 +56,16 @@ interface TreeNode {
 export type InorderTraversal<T extends TreeNode | null, Orders extends (string | number)[] = []> = [T] extends [TreeNode] 
   ? [...InorderTraversal<T['left']>, T['val'], ...InorderTraversal<T['right']>]
   : [];
+
+/*
+Example:
+type cases = [
+  Expect<Equal<Fibonacci<1>, 1>>,
+  Expect<Equal<Fibonacci<2>, 1>>,
+  Expect<Equal<Fibonacci<3>, 2>>,
+  Expect<Equal<Fibonacci<8>, 21>>,
+]
+*/
+export type Fibonacci<T extends number, C extends unknown[] = [], U1 extends unknown[] = [], U2 extends unknown[] = [unknown]> = T extends C['length']
+  ? U1['length']
+  : Fibonacci<T, [unknown, ...C], U2, [...U1, ...U2]>
