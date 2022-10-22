@@ -27,4 +27,16 @@ Example:
 StringToUnion<"ABC"> = "" | "A" | "B" | "C"
 */
 export type StringToUnion<S extends string> = S extends `${infer A}${infer B}` ? A | StringToUnion<B>: '';
-
+export type Combinations<T extends string, U = T> = U extends T
+  ? U | `${U}${Combinations<Exclude<T, U>>}`
+  : never;
+/*
+Example:
+type cases = [
+  Expect<Equal<AllCombinations<''>, ''>>,
+  Expect<Equal<AllCombinations<'A'>, '' | 'A'>>,
+  Expect<Equal<AllCombinations<'AB'>, '' | 'A' | 'B' | 'AB' | 'BA'>>,
+  Expect<Equal<AllCombinations<'ABC'>, '' | 'A' | 'B' | 'C' | 'AB' | 'AC' | 'BA' | 'BC' | 'CA' | 'CB' | 'ABC' | 'ACB' | 'BAC' | 'BCA' | 'CAB' | 'CBA'>>
+]
+*/
+export type Permutations<S extends string> = Combinations<StringToUnion<S>>;
