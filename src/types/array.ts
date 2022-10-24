@@ -1,6 +1,25 @@
 /*
 Example
 type cases = [
+  Expect<Equal<Chunk<[], 1>, []>>,
+  Expect<Equal<Chunk<[1, 2, 3], 1>, [[1], [2], [3]]>>,
+  Expect<Equal<Chunk<[1, 2, 3], 2>, [[1, 2], [3]]>>,
+  Expect<Equal<Chunk<[1, 2, 3, 4], 2>, [[1, 2], [3, 4]]>>,
+  Expect<Equal<Chunk<[1, 2, 3, 4], 5>, [[1, 2, 3, 4]]>>,
+  Expect<Equal<Chunk<[1, true, 2, false], 2>, [[1, true], [2, false]]>>,
+]
+*/
+export type Chunk<T extends any[], U extends number, ACC extends any[]= []> = ACC['length'] extends U 
+  ? [ACC, ...Chunk<T, U>]
+  : T extends [infer F, ...infer RT]
+    ? Chunk<RT, U, [...ACC, F]>
+    : ACC['length'] extends 0 
+      ? []
+      : [ACC];
+
+/*
+Example
+type cases = [
   Expect<Equal<Flatten<[]>, []>>,
   Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
   Expect<Equal<Flatten<[1, [2]]>, [1, 2]>>,
