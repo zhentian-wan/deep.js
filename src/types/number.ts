@@ -9,7 +9,9 @@ type cases = [
 ]
 */
 export type MinusOne<T extends number, ARR extends unknown[] = []> = any extends never ? never: [...ARR, 1]['length'] extends T ? ARR['length'] : MinusOne<T, [...ARR, 1]>;
-
+export type PlusOne<T extends number, C extends unknown[] = []> = C['length'] extends T
+  ? [...C, unknown]['length']
+  : PlusOne<T, [...C, unknown]>;
 /*
 Only positive number
 Example
