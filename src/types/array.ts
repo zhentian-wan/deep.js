@@ -20,6 +20,35 @@ export type Chunk<T extends any[], U extends number, ACC extends any[]= []> = AC
 /*
 Example
 type cases = [
+  Expect<Equal<Fill<[], 0>, []>>,
+  Expect<Equal<Fill<[], 0, 0, 3>, []>>,
+  Expect<Equal<Fill<[1, 2, 3], 0, 0, 0>, [1, 2, 3]>>,
+  Expect<Equal<Fill<[1, 2, 3], 0, 2, 2>, [1, 2, 3]>>,
+  Expect<Equal<Fill<[1, 2, 3], 0>, [0, 0, 0]>>,
+  Expect<Equal<Fill<[1, 2, 3], true>, [true, true, true]>>,
+  Expect<Equal<Fill<[1, 2, 3], true, 0, 1>, [true, 2, 3]>>,
+  Expect<Equal<Fill<[1, 2, 3], true, 1, 3>, [1, true, true]>>,
+  Expect<Equal<Fill<[1, 2, 3], true, 10, 0>, [1, 2, 3]>>,
+  Expect<Equal<Fill<[1, 2, 3], true, 0, 10>, [true, true, true]>>,
+]
+*/
+export type Fill<
+  T extends unknown[],
+  N,
+  Start extends number = 0,
+  End extends number = T['length'],
+  P extends number = 0                                                // set a pointer, init with 0
+> = Start extends End                                                 // Stop when Start = End
+  ? T
+  : T extends [infer F, ...infer RT] 
+    ? P extends Start                  
+      ? [N, ...Fill<RT, N, PlusOne<Start>, End, PlusOne<P>>]          // Replace the value when Pointer = Start, increasing value by 1
+      : [F, ...Fill<RT, N, Start, End, PlusOne<P>>]                   // No need to replace F, increase P
+    : [];
+
+/*
+Example
+type cases = [
   Expect<Equal<Flatten<[]>, []>>,
   Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
   Expect<Equal<Flatten<[1, [2]]>, [1, 2]>>,
