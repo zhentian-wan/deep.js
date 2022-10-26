@@ -1,3 +1,4 @@
+import type { Space } from './utils'
 /*
 Example:
 type cases = [
@@ -40,3 +41,19 @@ type cases = [
 ]
 */
 export type Permutations<S extends string> = Combinations<StringToUnion<S>>;
+
+/*
+Example
+type cases = [
+  Expect<Equal<TrimRight<'str'>, 'str'>>,
+  Expect<Equal<TrimRight<'str  '>, 'str'>>,
+  Expect<Equal<TrimRight<'str     '>, 'str'>>,
+  Expect<Equal<TrimRight<'     str     '>, '     str'>>,
+  Expect<Equal<TrimRight<'   foo bar  \n\t '>, '   foo bar'>>,
+  Expect<Equal<TrimRight<''>, ''>>,
+  Expect<Equal<TrimRight<'\n\t '>, ''>>,
+]
+*/
+export type TrimRight<S extends string> = S extends `${infer Left}${Space}` 
+  ? TrimRight<Left>
+  : S;
