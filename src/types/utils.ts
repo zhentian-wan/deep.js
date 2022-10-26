@@ -1,3 +1,4 @@
+export type Space = ' ' | '\n\t';
 /*
 Example:    
 type cases = [
