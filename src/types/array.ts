@@ -154,3 +154,21 @@ export type Zip<T, U> = T extends [infer F1, ...infer R1]
   : [];
 
 
+/*
+Example
+type cases = [
+  Expect<Equal<Without<[1, 2], 1>, [2]>>,
+  Expect<Equal<Without<[1, 2, 4, 1, 5], [1, 2]>, [4, 5]>>,
+  Expect<Equal<Without<[2, 3, 2, 3, 2, 3, 2, 3], [2, 3]>, []>>,
+]
+*/
+export type Without<T extends any[], U extends any[] | any> = T extends [infer F, ...infer RT]
+  ? U extends any[]                 // U is array like
+    ? F extends U[number]           // F in U array
+      ? Without<RT, U>                // exlcude F
+      : [F, ...Without<RT, U>]        // include F
+    : F extends U                   // U is not an array like
+      ? Without<RT, U>                // exlcude F
+      : [F, ...Without<RT, U>]        // include F
+  : [];
+
