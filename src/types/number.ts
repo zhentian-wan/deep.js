@@ -31,3 +31,19 @@ export type GreaterThan<T extends number, U extends number, ACC extends unknown[
     : U extends ACC['length']
       ? true
       : GreaterThan<T, U, [...ACC, unknown]>;
+
+/*
+Example
+type cases = [
+  Expect<Equal<Trunc<0.1>, '0'>>,
+  Expect<Equal<Trunc<1.234>, '1'>>,
+  Expect<Equal<Trunc<12.345>, '12'>>,
+  Expect<Equal<Trunc<-5.1>, '-5'>>,
+  Expect<Equal<Trunc<'1.234'>, '1'>>,
+  Expect<Equal<Trunc<'-10.234'>, '-10'>>,
+  Expect<Equal<Trunc<10>, '10'>>,
+]
+*/
+export type Trunc<N extends number | string> = `${N}` extends `${infer NUM}.${infer _}`
+  ? `${NUM}`
+  : `${N}`;
