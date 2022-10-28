@@ -185,6 +185,16 @@ export type Reverse<T> = T extends [...infer H, infer T] ? [T, ...Reverse<H>] : 
 /*
 Example
 type cases = [
+  Expect<Equal<Unshift<[], 1>, [1]>>,
+  Expect<Equal<Unshift<[1, 2], 0>, [0, 1, 2]>>,
+  Expect<Equal<Unshift<['1', 2, '3'], boolean>, [boolean, '1', 2, '3']>>,
+]
+*/
+type Unshift<T extends any[], U> = [U, ...T];
+
+/*
+Example
+type cases = [
   Expect<Equal<TupleToNestedObject<['a'], string>, { a: string }>>,
   Expect<Equal<TupleToNestedObject<['a', 'b'], number>, { a: { b: number } }>>,
   Expect<Equal<TupleToNestedObject<['a', 'b', 'c'], boolean>, { a: { b: { c: boolean } } }>>,
