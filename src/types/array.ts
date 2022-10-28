@@ -170,7 +170,7 @@ type cases = [
   Expect<Equal<Push<['1', 2, '3'], boolean>, ['1', 2, '3', boolean]>>,
 ]
 */
-type Push<T extends any[], U> = [...T, U];
+export type Push<T extends any[], U> = [...T, U];
 
 /*
 Example
@@ -190,7 +190,7 @@ type cases = [
   Expect<Equal<Unshift<['1', 2, '3'], boolean>, [boolean, '1', 2, '3']>>,
 ]
 */
-type Unshift<T extends any[], U> = [U, ...T];
+export type Unshift<T extends any[], U> = [U, ...T];
 
 /*
 Example
