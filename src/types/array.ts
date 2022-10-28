@@ -165,16 +165,12 @@ export type IndexOf<T extends any[], U, ACC extends unknown[] = []> = T extends 
 /*
 Example
 type cases = [
-  Expect<Equal<TupleToNestedObject<['a'], string>, { a: string }>>,
-  Expect<Equal<TupleToNestedObject<['a', 'b'], number>, { a: { b: number } }>>,
-  Expect<Equal<TupleToNestedObject<['a', 'b', 'c'], boolean>, { a: { b: { c: boolean } } }>>,
-  Expect<Equal<TupleToNestedObject<[], boolean>, boolean>>,
+  Expect<Equal<Push<[], 1>, [1]>>,
+  Expect<Equal<Push<[1, 2], '3'>, [1, 2, '3']>>,
+  Expect<Equal<Push<['1', 2, '3'], boolean>, ['1', 2, '3', boolean]>>,
 ]
 */
-export type TupleToNestedObject<T extends any[], U> = T extends [infer A extends string, ...(infer REST)]
-  ? {[Key in A]: TupleToNestedObject<REST, U>}
-  : U;
-
+type Push<T extends any[], U> = [...T, U];
 
 /*
 Example
@@ -186,23 +182,18 @@ type cases = [
 */
 export type Reverse<T> = T extends [...infer H, infer T] ? [T, ...Reverse<H>] : [];
 
-
 /*
 Example
 type cases = [
-  Expect<Equal<Zip<[], []>, []>>,
-  Expect<Equal<Zip<[1, 2], [true, false]>, [[1, true], [2, false]]>>,
-  Expect<Equal<Zip<[1, 2, 3], ['1', '2']>, [[1, '1'], [2, '2']]>>,
-  Expect<Equal<Zip<[], [1, 2, 3]>, []>>,
-  Expect<Equal<Zip<[[1, 2]], [3]>, [[[1, 2], 3]]>>,
+  Expect<Equal<TupleToNestedObject<['a'], string>, { a: string }>>,
+  Expect<Equal<TupleToNestedObject<['a', 'b'], number>, { a: { b: number } }>>,
+  Expect<Equal<TupleToNestedObject<['a', 'b', 'c'], boolean>, { a: { b: { c: boolean } } }>>,
+  Expect<Equal<TupleToNestedObject<[], boolean>, boolean>>,
 ]
 */
-export type Zip<T, U> = T extends [infer F1, ...infer R1]
-  ? U extends [infer F2, ...infer R2]
-    ? [[F1, F2], ...Zip<R1, R2>]
-    : []
-  : [];
-
+export type TupleToNestedObject<T extends any[], U> = T extends [infer A extends string, ...(infer REST)]
+  ? {[Key in A]: TupleToNestedObject<REST, U>}
+  : U;
 
 /*
 Example
@@ -222,3 +213,19 @@ export type Without<T extends any[], U extends any[] | any> = T extends [infer F
       : [F, ...Without<RT, U>]        // include F
   : [];
 
+
+/*
+Example
+type cases = [
+  Expect<Equal<Zip<[], []>, []>>,
+  Expect<Equal<Zip<[1, 2], [true, false]>, [[1, true], [2, false]]>>,
+  Expect<Equal<Zip<[1, 2, 3], ['1', '2']>, [[1, '1'], [2, '2']]>>,
+  Expect<Equal<Zip<[], [1, 2, 3]>, []>>,
+  Expect<Equal<Zip<[[1, 2]], [3]>, [[[1, 2], 3]]>>,
+]
+*/
+export type Zip<T, U> = T extends [infer F1, ...infer R1]
+  ? U extends [infer F2, ...infer R2]
+    ? [[F1, F2], ...Zip<R1, R2>]
+    : []
+  : [];
