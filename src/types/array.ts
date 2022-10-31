@@ -212,6 +212,17 @@ export type Unshift<T extends any[], U> = [U, ...T];
 /*
 Example
 type cases = [
+  Expect<Equal<Subsequence<[1, 2]>, [] | [1] | [2] | [1, 2]>>,
+  Expect<Equal<Subsequence<[1, 2, 3]>, [] | [1] | [2] | [1, 2] | [3] | [1, 3] | [2, 3] | [1, 2, 3] >>,
+]
+*/
+export type Subsequence<T extends any[]> = T extends [infer F, ...infer RT]
+  ? Subsequence<RT> | [F, ...Subsequence<RT>]
+  : [];
+
+/*
+Example
+type cases = [
   Expect<Equal<TupleToNestedObject<['a'], string>, { a: string }>>,
   Expect<Equal<TupleToNestedObject<['a', 'b'], number>, { a: { b: number } }>>,
   Expect<Equal<TupleToNestedObject<['a', 'b', 'c'], boolean>, { a: { b: { c: boolean } } }>>,
