@@ -34,6 +34,25 @@ export type GreaterThan<T extends number, U extends number, ACC extends unknown[
 
 /*
 Example
+let x = 1
+let y = 1 as const
+
+type cases1 = [
+  Expect<Equal<IsInteger<1>, 1>>,
+  Expect<Equal<IsInteger<1.1>, never>>,
+  Expect<Equal<IsInteger<1.0>, 1>>,
+  Expect<Equal<IsInteger<typeof x>, never>>,
+  Expect<Equal<IsInteger<typeof y>, 1>>,
+]
+*/
+export type IsInteger<T> = `${T & number}` extends `${number}.${number}` 
+  ? never
+  : number extends T
+    ? never
+    : T;
+
+/*
+Example
 type Result1 = | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 type Result2 = | 0 | 1 | 2
 type Result3 =
