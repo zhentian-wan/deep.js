@@ -100,6 +100,22 @@ export type First<T extends any[]> = T extends [infer First, ...infer REST] ? Fi
 
 /*
 Example
+const tesla = ['tesla', 'model 3', 'model X', 'model Y'] as const
+const spaceX = ['FALCON 9', 'FALCON HEAVY', 'DRAGON', 'STARSHIP', 'HUMAN SPACEFLIGHT'] as const
+
+type cases = [
+  Expect<Equal<Length<typeof tesla>, 4>>,
+  Expect<Equal<Length<typeof spaceX>, 5>>,
+  // @ts-expect-error
+  Length<5>,
+  // @ts-expect-error
+  Length<'hello world'>,
+]
+*/
+export type Length<T extends readonly any[]> = T['length'];
+
+/*
+Example
 type cases = [
   Expect<Equal<LastIndexOf<[1, 2, 3, 2, 1], 2>, 3>>,
   Expect<Equal<LastIndexOf<[2, 6, 3, 8, 4, 1, 7, 3, 9], 3>, 7>>,
