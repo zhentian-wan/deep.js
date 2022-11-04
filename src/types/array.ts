@@ -117,6 +117,24 @@ export type LastIndexOf<T extends any[], U> = T extends [...infer RT, infer L]
 /*
 Example
 type cases = [
+  Expect<Equal<Head<[3, 2, 1]>, 3>>,
+  Expect<Equal<Head<[() => 123, { a: string }]>, () => 123>>,
+  Expect<Equal<Head<[]>, never>>,
+  Expect<Equal<Head<[undefined]>, undefined>>,
+]
+
+type errors = [
+  // @ts-expect-error
+  Head<'notArray'>,
+  // @ts-expect-error
+  Head<{ 0: 'arrayLike' }>,
+]
+*/
+export type Head<T extends any[]> = T extends [infer HEAD, ...infer RT] ? HEAD: never;
+
+/*
+Example
+type cases = [
   // @ts-expect-error
   Shift<unknown>,
   Expect<Equal<Shift<[]>, []>>,
