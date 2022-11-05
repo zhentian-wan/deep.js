@@ -117,6 +117,15 @@ export type Length<T extends readonly any[]> = T['length'];
 /*
 Example
 type cases = [
+  Expect<Equal<Last<[3, 2, 1]>, 1>>,
+  Expect<Equal<Last<[() => 123, { a: string }]>, { a: string }>>,
+]
+*/
+export type Last<T extends any[]> = T extends [...infer RT, infer L] ? L : never;
+
+/*
+Example
+type cases = [
   Expect<Equal<LastIndexOf<[1, 2, 3, 2, 1], 2>, 3>>,
   Expect<Equal<LastIndexOf<[2, 6, 3, 8, 4, 1, 7, 3, 9], 3>, 7>>,
   Expect<Equal<LastIndexOf<[0, 0, 0], 2>, -1>>,
