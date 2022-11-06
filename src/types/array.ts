@@ -262,6 +262,16 @@ export type Push<T extends any[], U> = [...T, U];
 /*
 Example
 type cases = [
+  Expect<Equal<Pop<[3, 2, 1]>, [3, 2]>>,
+  Expect<Equal<Pop<['a', 'b', 'c', 'd']>, ['a', 'b', 'c']>>,
+  Expect<Equal<Pop<[]>, []>>,
+]
+*/
+export type Pop<T extends any[]> = T extends [...infer RT, infer L] ? RT : [];
+
+/*
+Example
+type cases = [
   Expect<Equal<Reverse<[]>, []>>,
   Expect<Equal<Reverse<['a', 'b']>, ['b', 'a']>>,
   Expect<Equal<Reverse<['a', 'b', 'c']>, ['c', 'b', 'a']>>,
