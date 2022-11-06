@@ -178,6 +178,41 @@ export type KeyStartsWith<
 
 /*
 Example
+interface Cat {
+  kind: 'cat'
+  breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
+}
+
+interface Dog {
+  kind: 'dog'
+  breeds: 'Hound' | 'Brittany' | 'Bulldog' | 'Boxer'
+  color: 'brown' | 'white' | 'black'
+}
+
+type Animal = Cat | Dog
+
+type cases = [
+  Expect<Equal<LookUp<Animal, 'dog', 'kind'>, Dog>>,
+  Expect<Equal<LookUp<Animal, 'cat', 'kind'>, Cat>>,
+  Expect<Equal<LookUp<Animal, {kind: 'dog'}>, Dog>>,
+  Expect<Equal<LookUp<Animal, {kind: 'cat'}>, Cat>>,
+]
+*/
+type LookUpKey<U extends {[Key in K]: string}, T extends string, K extends string = 'type'> = U extends {[Key in K]: T} ? U : never;
+type LookUpLike<U extends Record<PropertyKey, any>, T extends Record<PropertyKey, any>> = U extends T ? U : never;
+
+export type LookUp<
+  U extends Record<PropertyKey, any>, 
+  T extends Record<PropertyKey, any> | string, 
+  K extends string = 'type'
+> = T extends Record<PropertyKey, any> 
+      ? LookUpLike<U, T>
+      : T extends string
+        ? LookUpKey<U, T, K>
+        : never;
+
+/*
+Example
 interface User {
   name: string
   age: number
