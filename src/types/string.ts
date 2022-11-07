@@ -45,6 +45,25 @@ export type Permutations<S extends string> = Combinations<StringToUnion<S>>;
 /*
 Example
 type cases = [
+  Expect<Equal<Trim<'str'>, 'str'>>,
+  Expect<Equal<Trim<' str'>, 'str'>>,
+  Expect<Equal<Trim<'     str'>, 'str'>>,
+  Expect<Equal<Trim<'str   '>, 'str'>>,
+  Expect<Equal<Trim<'     str     '>, 'str'>>,
+  Expect<Equal<Trim<'   \n\t foo bar \t'>, 'foo bar'>>,
+  Expect<Equal<Trim<''>, ''>>,
+  Expect<Equal<Trim<' \n\t '>, ''>>,
+]
+*/
+export type Trim<S extends string> = S extends `${Space}${infer Word}`
+? Trim<Word>
+: S extends `${infer Word}${Space}`
+  ? Trim<Word>
+  : S;
+
+/*
+Example
+type cases = [
   Expect<Equal<TrimLeft<'str'>, 'str'>>,
   Expect<Equal<TrimLeft<' str'>, 'str'>>,
   Expect<Equal<TrimLeft<'     str'>, 'str'>>,
