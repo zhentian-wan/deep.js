@@ -1,4 +1,4 @@
-export type Space = ' ' | '\n\t';
+export type Space = ' ' | '\n' | '\t';
 export type Equal<T, U> = 
   (<P>(x: P) => P extends T ? 1: 2) extends 
   (<P>(x: P) => P extends U ? 1: 2) 
