@@ -72,3 +72,13 @@ export type ToPrimitive<T extends Record<PropertyKey, any>> = {
                         ? ObjectToPrimitive<T[Key]>
                         : ValueToPrimitive<T[Key]>
 }
+
+/*
+Example
+type cases = [
+  Expect<Equal<UnionToIntersection<'foo' | 42 | true>, 'foo' & 42 & true>>,
+  Expect<Equal<UnionToIntersection<(() => 'foo') | ((i: 42) => true)>, (() => 'foo') & ((i: 42) => true)>>,
+]
+*/
+export type UnionToIntersection<U> = (U extends any ? (x: U) => any: never) extends 
+  (x: infer R) => any ? R: never;
