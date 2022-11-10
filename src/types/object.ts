@@ -153,6 +153,17 @@ export type DeepMutable<T extends Record<PropertyKey,any>> = T extends (...args:
     };
 
 /*
+Example
+type cases = [
+  Expect<Equal<GetRequired<{ foo: number; bar?: string }>, { foo: number }>>,
+  Expect<Equal<GetRequired<{ foo: undefined; bar?: undefined }>, { foo: undefined }>>,
+]
+*/
+export type GetRequired<T extends Record<PropertyKey, any>> = {
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? Key: never]: T[Key]
+};
+
+/*
 Example:
 export type Obj = {
   a: "a";
