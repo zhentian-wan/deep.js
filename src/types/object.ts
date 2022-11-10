@@ -164,6 +164,17 @@ export type GetRequired<T extends Record<PropertyKey, any>> = {
 };
 
 /*
+Example
+type cases = [
+  Expect<Equal<GetOptional<{ foo: number; bar?: string }>, { bar?: string }>>,
+  Expect<Equal<GetOptional<{ foo: undefined; bar?: undefined }>, { bar?: undefined }>>,
+]
+*/
+export type GetOptional<T extends Record<PropertyKey, any>> = {
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? never: Key]: T[Key]
+};
+
+/*
 Example:
 export type Obj = {
   a: "a";
