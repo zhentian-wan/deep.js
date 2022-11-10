@@ -415,6 +415,19 @@ export type ObjectEntries<T extends object> = {
 /*
 Example
 type cases = [
+  Expect<Equal<OptionalKeys<{ a: number; b?: string }>, 'b'>>,
+  Expect<Equal<OptionalKeys<{ a: undefined; b?: undefined }>, 'b'>>,
+  Expect<Equal<OptionalKeys<{ a: undefined; b?: undefined; c?: string; d?: null }>, 'b' | 'c' | 'd'>>,
+  Expect<Equal<OptionalKeys<{}>, never>>,
+]
+*/
+export type OptionalKeys<T extends Record<PropertyKey, any>> = keyof {
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? never: Key]: any
+};
+
+/*
+Example
+type cases = [
   Expect<Equal<RequiredKeys<{ a: number; b?: string }>, 'a'>>,
   Expect<Equal<RequiredKeys<{ a: undefined; b?: undefined }>, 'a'>>,
   Expect<Equal<RequiredKeys<{ a: undefined; b?: undefined; c: string; d: null }>, 'a' | 'c' | 'd'>>,
