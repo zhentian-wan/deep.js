@@ -1,13 +1,12 @@
 /*
 Example
-const foo = (arg1: string, arg2: number): void => {}
-const bar = (arg1: boolean, arg2: { a: 'A' }): void => {}
-const baz = (): void => {}
-
 type cases = [
-  Expect<Equal<MyParameters<typeof foo>, [string, number]>>,
-  Expect<Equal<MyParameters<typeof bar>, [boolean, { a: 'A' }]>>,
-  Expect<Equal<MyParameters<typeof baz>, []>>,
+  Expect<Equal<Case1, Result1>>,
+  Expect<Equal<Case2, Result2>>,
+  // @ts-expect-error
+  AppendArgument<unknown, undefined>,
 ]
 */
-export type MyParameters<T extends (...args: any[]) => any> = T extends (...args: infer Args) => any ? Args: [];
+export type AppendArgument<Fn extends (...args: any[]) => void, A> = Fn extends (...args: infer Args) => infer RT 
+  ? (...x: [...Args, A]) => RT
+  : never; 
