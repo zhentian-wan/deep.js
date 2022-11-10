@@ -410,5 +410,17 @@ type cases = [
 */
 export type ObjectEntries<T extends object> = {
   [Key in keyof T]-?: Key extends keyof T ? [Key, T[Key] extends undefined ? undefined: Required<T>[Key]]: never
-}[keyof T]
+}[keyof T];
 
+/*
+Example
+type cases = [
+  Expect<Equal<RequiredKeys<{ a: number; b?: string }>, 'a'>>,
+  Expect<Equal<RequiredKeys<{ a: undefined; b?: undefined }>, 'a'>>,
+  Expect<Equal<RequiredKeys<{ a: undefined; b?: undefined; c: string; d: null }>, 'a' | 'c' | 'd'>>,
+  Expect<Equal<RequiredKeys<{}>, never>>,
+]
+*/
+export type RequiredKeys<T extends Record<PropertyKey, any>> = keyof {
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? Key: never]: any
+}
