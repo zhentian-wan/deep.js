@@ -20,6 +20,19 @@ export type CapitalizeWords<S extends string, Prev extends string = '', ACC exte
   : ACC;
 
 /*
+Example
+type cases = [
+  Expect<Equal<LengthOfString<''>, 0>>,
+  Expect<Equal<LengthOfString<'kumiko'>, 6>>,
+  Expect<Equal<LengthOfString<'reina'>, 5>>,
+  Expect<Equal<LengthOfString<'Sound! Euphonium'>, 16>>,
+]
+*/
+export type LengthOfString<S extends string, ACC extends unknown[] = []> = S extends `${infer _}${infer REST}`
+  ? LengthOfString<REST, [...ACC, unknown]>
+  : ACC['length'];
+
+/*
 Example:
 type cases = [
   Expect<Equal<StartsWith<'abc', 'ac'>, false>>,
