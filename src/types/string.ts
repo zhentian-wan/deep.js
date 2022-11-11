@@ -1,4 +1,24 @@
-import type { Space } from './utils'
+import type { Space, UpperLetterUnion, StringToUnion } from './utils'
+
+/*
+Example
+type cases = [
+  Expect<Equal<CapitalizeWords<'foobar'>, 'Foobar'>>,
+  Expect<Equal<CapitalizeWords<'FOOBAR'>, 'FOOBAR'>>,
+  Expect<Equal<CapitalizeWords<'foo bar'>, 'Foo Bar'>>,
+  Expect<Equal<CapitalizeWords<'foo bar hello world'>, 'Foo Bar Hello World'>>,
+  Expect<Equal<CapitalizeWords<'foo bar.hello,world'>, 'Foo Bar.Hello,World'>>,
+  Expect<Equal<CapitalizeWords<'aa!bb@cc#dd$ee%ff^gg&hh*ii(jj)kk_ll+mm{nn}oo|pp🤣qq'>, 
+  'Aa!Bb@Cc#Dd$Ee%Ff^Gg&Hh*Ii(Jj)Kk_Ll+Mm{Nn}Oo|Pp🤣Qq'>>,
+  Expect<Equal<CapitalizeWords<''>, ''>>,
+]
+*/
+export type CapitalizeWords<S extends string, Prev extends string = '', ACC extends string = ''> = S extends `${infer First}${infer REST}`
+  ? Uppercase<Prev> extends UpperLetterUnion                     // only symbols and space cannnot be uppercased
+    ? CapitalizeWords<REST, First, `${ACC}${First}`>                // prev is char, the follow char not need to be uppercased
+    : CapitalizeWords<REST, First, `${ACC}${Uppercase<First>}`>     // pre is symbol, current char should be uppercased  
+  : ACC;
+
 /*
 Example:
 type cases = [
@@ -23,11 +43,7 @@ type cases = [
 */
 export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true: false;
 
-/*
-Example:
-StringToUnion<"ABC"> = "" | "A" | "B" | "C"
-*/
-export type StringToUnion<S extends string> = S extends `${infer A}${infer B}` ? A | StringToUnion<B>: '';
+
 export type Combinations<T extends string, U = T> = U extends T
   ? U | `${U}${Combinations<Exclude<T, U>>}`
   : never;
