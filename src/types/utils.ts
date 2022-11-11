@@ -1,4 +1,9 @@
 export type Space = ' ' | '\n' | '\t';
+/*
+Example:
+StringToUnion<"ABC"> = "" | "A" | "B" | "C"
+*/
+export type StringToUnion<S extends string> = S extends `${infer A}${infer B}` ? A | StringToUnion<B>: '';
 export type LowerLetterUnion = StringToUnion<'abcdefghijklmnopqrstuvwxyz'>;
 export type UpperLetterUnion = Uppercase<LowerLetterUnion>;
 export type Equal<T, U> = 
