@@ -1,4 +1,25 @@
 export type Space = ' ' | '\n' | '\t';
+
+/*
+Example
+type cases = [
+  Expect<Equal<CamelCase<'foobar'>, 'foobar'>>,
+  Expect<Equal<CamelCase<'FOOBAR'>, 'foobar'>>,
+  Expect<Equal<CamelCase<'foo_bar'>, 'fooBar'>>,
+  Expect<Equal<CamelCase<'foo_bar_hello_world'>, 'fooBarHelloWorld'>>,
+  Expect<Equal<CamelCase<'HELLO_WORLD_WITH_TYPES'>, 'helloWorldWithTypes'>>,
+  Expect<Equal<CamelCase<'-'>, '-'>>,
+  Expect<Equal<CamelCase<''>, ''>>,
+  Expect<Equal<CamelCase<'😎'>, '😎'>>,
+]
+*/
+type ToCamelCase<S extends string, ACC extends string = ''> = S extends `${infer F}${infer REST}`
+  ? F extends '_'
+    ? ToCamelCase<Capitalize<REST>, `${ACC}`>
+    : ToCamelCase<REST, `${ACC}${F}`>
+  : ACC;
+export type CamelCase<S extends string> = ToCamelCase<Lowercase<S>>           // conver all chars to lower case first
+
 /*
 Example:
 StringToUnion<"ABC"> = "" | "A" | "B" | "C"
