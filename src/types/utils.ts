@@ -3,6 +3,26 @@ export type Space = ' ' | '\n' | '\t';
 /*
 Example
 type cases = [
+  Expect<Equal<KebabCase<'FooBarBaz'>, 'foo-bar-baz'>>,
+  Expect<Equal<KebabCase<'fooBarBaz'>, 'foo-bar-baz'>>,
+  Expect<Equal<KebabCase<'foo-bar'>, 'foo-bar'>>,
+  Expect<Equal<KebabCase<'foo_bar'>, 'foo_bar'>>,
+  Expect<Equal<KebabCase<'Foo-Bar'>, 'foo--bar'>>,
+  Expect<Equal<KebabCase<'ABC'>, 'a-b-c'>>,
+  Expect<Equal<KebabCase<'-'>, '-'>>,
+  Expect<Equal<KebabCase<''>, ''>>,
+  Expect<Equal<KebabCase<'😎'>, '😎'>>,
+]
+*/
+export type KebabCase<S extends string> = S extends `${infer First}${infer REST}` 
+  ? REST extends Uncapitalize<REST> 
+    ? `${Lowercase<First>}${KebabCase<REST>}`
+    : `${Lowercase<First>}-${KebabCase<REST>}`
+  : S;
+
+/*
+Example
+type cases = [
   Expect<Equal<CamelCase<'foobar'>, 'foobar'>>,
   Expect<Equal<CamelCase<'FOOBAR'>, 'foobar'>>,
   Expect<Equal<CamelCase<'foo_bar'>, 'fooBar'>>,
