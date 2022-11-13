@@ -319,6 +319,29 @@ export type PartialByKeys<T, K extends keyof T = keyof T> = MergeObject<
 export type MergeObject<T> = { [P in keyof T]: T[P] };
 
 /*
+Example
+type Foo = {
+  a: number
+  b: string
+}
+type Bar = {
+  b: number
+  c: boolean
+}
+
+type cases = [
+  Expect<Equal<Merge<Foo, Bar>, {
+    a: number
+    b: number
+    c: boolean
+  }>>,
+]
+*/
+export type Merge<F extends Record<PropertyKey, any>, S extends Record<PropertyKey, any>> = {
+  [Key in keyof (F & S)]: Key extends keyof S ? S[Key] : Key extends keyof F ? F[Key]: never
+};
+
+/*
 Example: 
 interface Model {
   name: string
