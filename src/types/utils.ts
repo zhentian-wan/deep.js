@@ -151,6 +151,18 @@ S extends `/${string}/:${infer Param}/${infer REST}`
 /*
 Example
 type cases = [
+  Expect<Equal<IsAny<any>, true>>,
+  Expect<Equal<IsAny<undefined>, false>>,
+  Expect<Equal<IsAny<unknown>, false>>,
+  Expect<Equal<IsAny<never>, false>>,
+  Expect<Equal<IsAny<string>, false>>,
+]
+*/
+export type IsAny<T> = Equal<any, T>
+
+/*
+Example
+type cases = [
   Expect<Equal<IsNever<never>, true>>,
   Expect<Equal<IsNever<never | string>, false>>,
   Expect<Equal<IsNever<''>, false>>,
