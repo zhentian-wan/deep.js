@@ -213,25 +213,6 @@ export type Includes<T extends readonly any[], U> = T extends [infer F, ...infer
   : false;
 
 /*
-Example:
-type cases = [
-  Expect<Equal<IsTuple<[]>, true>>,
-  Expect<Equal<IsTuple<[number]>, true>>,
-  Expect<Equal<IsTuple<readonly [1]>, true>>,
-  Expect<Equal<IsTuple<{ length: 1 }>, false>>,
-  Expect<Equal<IsTuple<number[]>, false>>,
-  Expect<Equal<IsTuple<never>, false>>,
-]
-*/
-export type IsTuple<T> = [T] extends [never] 
-  ? false
-  : T extends readonly any[] 
-    ? any[] extends T 
-      ? false
-      : true
-    : false;
-
-/*
 Example
 type cases = [
   Expect<Equal<IndexOf<[1, 2, 3], 2>, 1>>,
