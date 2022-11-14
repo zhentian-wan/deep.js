@@ -203,6 +203,33 @@ export type DeepMutable<T extends Record<PropertyKey,any>> = T extends (...args:
 
 /*
 Example
+type Foo = {
+  name: string
+  age: string
+}
+type Bar = {
+  name: string
+  age: string
+  gender: number
+}
+type Coo = {
+  name: string
+  gender: number
+}
+
+type cases = [
+  Expect<Equal<Diff<Foo, Bar>, { gender: number }>>,
+  Expect<Equal<Diff<Bar, Foo>, { gender: number }>>,
+  Expect<Equal<Diff<Foo, Coo>, { age: string; gender: number }>>,
+  Expect<Equal<Diff<Coo, Foo>, { age: string; gender: number }>>,
+]
+*/
+export type Diff<T, S> = {
+  [K in Exclude<(keyof T | keyof S), (keyof T & keyof S)>]: (T & S)[K]
+};
+
+/*
+Example
 type cases = [
   Expect<Equal<GetRequired<{ foo: number; bar?: string }>, { foo: number }>>,
   Expect<Equal<GetRequired<{ foo: undefined; bar?: undefined }>, { foo: undefined }>>,
