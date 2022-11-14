@@ -192,3 +192,19 @@ type cases = [
 ]
 */
 export type IsNever<T> = [T] extends [never] ? true: false;
+
+/*
+Example
+type cases = [
+  Expect<Equal<ToNumber<'0'>, 0>>,
+  Expect<Equal<ToNumber<'5'>, 5>>,
+  Expect<Equal<ToNumber<'12'>, 12>>,
+  Expect<Equal<ToNumber<'27'>, 27>>,
+  Expect<Equal<ToNumber<'18@7_$%'>, never>>,
+]
+*/
+export type ToNumber<S extends string, ACC extends unknown[] = []> = S extends `${number}`
+  ? S extends `${ACC['length']}`
+    ? ACC['length']
+    : ToNumber<S, [...ACC, unknown]>
+  : never;
