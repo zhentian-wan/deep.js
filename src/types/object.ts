@@ -230,6 +230,34 @@ export type Diff<T, S> = {
 
 /*
 Example
+type Data = {
+  foo: {
+    bar: {
+      value: 'foobar'
+      count: 6
+    }
+    included: true
+  }
+  'foo.baz': false
+  hello: 'world'
+}
+type cases = [
+  Expect<Equal<Get<Data, 'hello'>, 'world'>>,
+  Expect<Equal<Get<Data, 'foo.bar.count'>, 6>>,
+  Expect<Equal<Get<Data, 'foo.bar'>, { value: 'foobar'; count: 6 }>>,
+  Expect<Equal<Get<Data, 'foo.baz'>, false>>,
+
+  Expect<Equal<Get<Data, 'no.existed'>, never>>,
+]
+*/
+export type Get<T extends Record<PropertyKey, any>, K extends string> = K extends keyof T
+  ? T[K]
+  : K extends `${infer P}.${infer U}`
+    ? Get<T[P], U>
+    : never;
+
+/*
+Example
 type cases = [
   Expect<Equal<GetRequired<{ foo: number; bar?: string }>, { foo: number }>>,
   Expect<Equal<GetRequired<{ foo: undefined; bar?: undefined }>, { foo: undefined }>>,
