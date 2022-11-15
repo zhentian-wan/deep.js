@@ -88,6 +88,23 @@ export type Fill<
 /*
 Example
 type cases = [
+  Expect<Equal<FilterOut<[], never>, []>>,
+  Expect<Equal<FilterOut<[never], never>, []>>,
+  Expect<Equal<FilterOut<['a', never], never>, ['a']>>,
+  Expect<Equal<FilterOut<[1, never, 'a'], never>, [1, 'a']>>,
+  Expect<Equal<FilterOut<[never, 1, 'a', undefined, false, null], never | null | undefined>, [1, 'a', false]>>,
+  Expect<Equal<FilterOut<[number | null | undefined, never], never | null | undefined>, [number | null | undefined]>>,
+]
+*/
+export type FilterOut<T extends any[], U, ACC extends any[] = []> = T extends [infer F, ...infer REST]
+  ? [F] extends [U]
+    ? FilterOut<REST, U, ACC>
+    : FilterOut<REST, U, [...ACC, F]>
+  : ACC;
+
+/*
+Example
+type cases = [
   Expect<Equal<Flatten<[]>, []>>,
   Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
   Expect<Equal<Flatten<[1, [2]]>, [1, 2]>>,
