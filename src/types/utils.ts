@@ -1,3 +1,4 @@
+type FalsyValues = '' | [] | Record<PropertyKey, never> | 0 | false | undefined | null
 export type Space = ' ' | '\n' | '\t';
 
 /*

@@ -1,4 +1,25 @@
-import type { Equal } from './utils';
+import type { Equal, FalsyValues } from './utils';
+
+/*
+Example
+type cases = [
+  Expect<Equal<AnyOf<[1, 'test', true, [1], { name: 'test' }, { 1: 'test' }]>, true>>,
+  Expect<Equal<AnyOf<[1, '', false, [], {}]>, true>>,
+  Expect<Equal<AnyOf<[0, 'test', false, [], {}]>, true>>,
+  Expect<Equal<AnyOf<[0, '', true, [], {}]>, true>>,
+  Expect<Equal<AnyOf<[0, '', false, [1], {}]>, true>>,
+  Expect<Equal<AnyOf<[0, '', false, [], { name: 'test' }]>, true>>,
+  Expect<Equal<AnyOf<[0, '', false, [], { 1: 'test' }]>, true>>,
+  Expect<Equal<AnyOf<[0, '', false, [], { name: 'test' }, { 1: 'test' }]>, true>>,
+  Expect<Equal<AnyOf<[0, '', false, [], {}, undefined, null]>, false>>,
+  Expect<Equal<AnyOf<[]>, false>>,
+]
+*/
+export type AnyOf<T extends readonly any[]> = T extends [infer F, ...infer RT]
+  ? F extends FalsyValues
+    ? AnyOf<RT>
+    : true
+  : false;
 
 /*
 Example
