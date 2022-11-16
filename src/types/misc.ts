@@ -68,4 +68,15 @@ type cases = [
 */
 export type Fibonacci<T extends number, C extends unknown[] = [], U1 extends unknown[] = [], U2 extends unknown[] = [unknown]> = T extends C['length']
   ? U1['length']
-  : Fibonacci<T, [unknown, ...C], U2, [...U1, ...U2]>
+  : Fibonacci<T, [unknown, ...C], U2, [...U1, ...U2]>;
+
+/*
+Example
+declare function format<S extends string>(template: S, args: Record<Placeholder<S>, unknown>): string
+let text = format('Name: {name}, Age: {age}', {name: 'Homer', age: 42})
+*/
+export type Placeholder<T extends string> = T extends `${string}{${infer P}}${infer REST}`
+  ? P | Placeholder<REST>
+  : never;
+
+
