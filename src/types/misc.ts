@@ -79,4 +79,18 @@ export type Placeholder<T extends string> = T extends `${string}{${infer P}}${in
   ? P | Placeholder<REST>
   : never;
 
+/*
+Example
+declare function makeWatchedObject<T>(obj: T): T & OnPropChnagedMethods<T>;
+let homer = makeWatchedObject({
+  firstName: "Homer",
+  age: 33,
+  location: "Springfield"
+})
+*/
+export type OnPropChnagedMethods<T> = {
+  [Key in keyof T & string as `${Key}Changed`]: (cb: (newValue: T[Key]) => void) => void
+};
+  
+
 
