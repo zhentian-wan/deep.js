@@ -58,6 +58,71 @@ export type Chunk<T extends any[], U extends number, ACC extends any[]= []> = AC
 
 /*
 Example
+const OperatingSystem = ['macOS', 'Windows', 'Linux'] as const
+const Command = ['echo', 'grep', 'sed', 'awk', 'cut', 'uniq', 'head', 'tail', 'xargs', 'shift'] as const
+
+type cases = [
+  Expect<Equal<Enum<[]>, {}>>,
+  Expect<Equal<
+  Enum<typeof OperatingSystem>,
+  {
+    readonly MacOS: 'macOS'
+    readonly Windows: 'Windows'
+    readonly Linux: 'Linux'
+  }
+  >>,
+  Expect<Equal<
+  Enum<typeof OperatingSystem, true>,
+  {
+    readonly MacOS: 0
+    readonly Windows: 1
+    readonly Linux: 2
+  }
+  >>,
+  Expect<Equal<
+  Enum<typeof Command>,
+  {
+    readonly Echo: 'echo'
+    readonly Grep: 'grep'
+    readonly Sed: 'sed'
+    readonly Awk: 'awk'
+    readonly Cut: 'cut'
+    readonly Uniq: 'uniq'
+    readonly Head: 'head'
+    readonly Tail: 'tail'
+    readonly Xargs: 'xargs'
+    readonly Shift: 'shift'
+  }
+  >>,
+  Expect<Equal<
+  Enum<typeof Command, true>,
+  {
+    readonly Echo: 0
+    readonly Grep: 1
+    readonly Sed: 2
+    readonly Awk: 3
+    readonly Cut: 4
+    readonly Uniq: 5
+    readonly Head: 6
+    readonly Tail: 7
+    readonly Xargs: 8
+    readonly Shift: 9
+  }
+  >>,
+]
+*/
+export type Enum<T extends readonly string[], N extends boolean = false> = {
+  readonly [Key in T[number] as `${Capitalize<Key>}`]: N extends false ? Key : FindIndex<T, Key> 
+};
+
+export type FindIndex<T extends readonly any[], K, ACC extends unknown[] = []> = T extends readonly [infer F, ...infer RT]
+  ? K extends F
+    ? ACC['length']
+    : FindIndex<RT, K, [...ACC, unknown]>
+  : -1;
+
+/*
+Example
 type cases = [
   Expect<Equal<Fill<[], 0>, []>>,
   Expect<Equal<Fill<[], 0, 0, 3>, []>>,
