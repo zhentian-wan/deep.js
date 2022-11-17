@@ -217,3 +217,13 @@ export type ToNumber<S extends string, ACC extends unknown[] = []> = S extends `
  export type Nullable<T extends Record<PropertyKey, unknown>> = {
     [K in keyof T]: T[K] | null
 }
+
+/*
+Example
+type t = XOR<true, false> // true
+type t1 = XOR<true, true> // false
+*/
+export type XOR<N extends boolean, M extends boolean> = 
+  [N, M] extends [true, true] ? false :
+  [N, M] extends [false, false] ? false :
+  true;
