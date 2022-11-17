@@ -28,9 +28,12 @@ type cases = [
   Expect<Equal<LengthOfString<'Sound! Euphonium'>, 16>>,
 ]
 */
-export type LengthOfString<S extends string, ACC extends unknown[] = []> = S extends `${infer _}${infer REST}`
-  ? LengthOfString<REST, [...ACC, unknown]>
-  : ACC['length'];
+export type LengthOfString<S extends string, ACC extends unknown[] = []> = S extends `${string}${string}${string}${string}${string}${string}${string}${string}${string}${string}${infer REST}`
+  ? LengthOfString<REST, [...ACC, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown]>
+  : S extends `${string}${infer REST}`
+    ? LengthOfString<REST, [...ACC, unknown]>
+    : ACC['length'];
+
 
 /*
 Example:
