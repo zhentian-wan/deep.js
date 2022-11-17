@@ -209,3 +209,11 @@ export type ToNumber<S extends string, ACC extends unknown[] = []> = S extends `
     ? ACC['length']
     : ToNumber<S, [...ACC, unknown]>
   : never;
+  
+ /*
+ Example
+ type t = Nullable<{a: number, b: string}> // {a: number | null, b: string | null}
+ */ 
+ export type Nullable<T extends Record<PropertyKey, unknown>> = {
+    [K in keyof T]: T[K] | null
+}
