@@ -1,4 +1,5 @@
-import type { Equal, FalsyValues } from './utils';
+import { PlusOne } from "./number";
+import type { Equal, FalsyValues } from "./utils";
 
 /*
 Example
@@ -17,8 +18,8 @@ type cases = [
 */
 export type AnyOf<T extends readonly any[]> = T extends [infer F, ...infer RT]
   ? F extends FalsyValues
-  ? AnyOf<RT>
-  : true
+    ? AnyOf<RT>
+    : true
   : false;
 
 /*
@@ -31,9 +32,12 @@ type cases = [
   Expect<Equal<ConstructTuple<1000>['length'], 1000>>,
 ]
 */
-export type ConstructTuple<L extends number, ACC extends unknown[] = []> = L extends 0
+export type ConstructTuple<
+  L extends number,
+  ACC extends unknown[] = []
+> = L extends 0
   ? []
-  : ACC['length'] extends L
+  : ACC["length"] extends L
   ? ACC
   : ConstructTuple<L, [...ACC, unknown]>;
 
@@ -48,11 +52,15 @@ type cases = [
   Expect<Equal<Chunk<[1, true, 2, false], 2>, [[1, true], [2, false]]>>,
 ]
 */
-export type Chunk<T extends any[], U extends number, ACC extends any[] = []> = ACC['length'] extends U
+export type Chunk<
+  T extends any[],
+  U extends number,
+  ACC extends any[] = []
+> = ACC["length"] extends U
   ? [ACC, ...Chunk<T, U>]
   : T extends [infer F, ...infer RT]
   ? Chunk<RT, U, [...ACC, F]>
-  : ACC['length'] extends 0
+  : ACC["length"] extends 0
   ? []
   : [ACC];
 
@@ -112,13 +120,19 @@ type cases = [
 ]
 */
 export type Enum<T extends readonly string[], N extends boolean = false> = {
-  readonly [Key in T[number]as `${Capitalize<Key>}`]: N extends false ? Key : FindIndex<T, Key>
+  readonly [Key in T[number] as `${Capitalize<Key>}`]: N extends false
+    ? Key
+    : FindIndex<T, Key>;
 };
 
-export type FindIndex<T extends readonly any[], K, ACC extends unknown[] = []> = T extends readonly [infer F, ...infer RT]
+export type FindIndex<
+  T extends readonly any[],
+  K,
+  ACC extends unknown[] = []
+> = T extends readonly [infer F, ...infer RT]
   ? K extends F
-  ? ACC['length']
-  : FindIndex<RT, K, [...ACC, unknown]>
+    ? ACC["length"]
+    : FindIndex<RT, K, [...ACC, unknown]>
   : -1;
 
 /*
@@ -140,14 +154,14 @@ export type Fill<
   T extends unknown[],
   N,
   Start extends number = 0,
-  End extends number = T['length'],
-  P extends number = 0                                                // set a pointer, init with 0
-> = Start extends End                                                 // Stop when Start = End
+  End extends number = T["length"],
+  P extends number = 0 // set a pointer, init with 0
+> = Start extends End // Stop when Start = End
   ? T
   : T extends [infer F, ...infer RT]
   ? P extends Start
-  ? [N, ...Fill<RT, N, PlusOne<Start>, End, PlusOne<P>>]          // Replace the value when Pointer = Start, increasing value by 1
-  : [F, ...Fill<RT, N, Start, End, PlusOne<P>>]                   // No need to replace F, increase P
+    ? [N, ...Fill<RT, N, PlusOne<Start>, End, PlusOne<P>>] // Replace the value when Pointer = Start, increasing value by 1
+    : [F, ...Fill<RT, N, Start, End, PlusOne<P>>] // No need to replace F, increase P
   : [];
 
 /*
@@ -161,10 +175,13 @@ type cases = [
   Expect<Equal<FilterOut<[number | null | undefined, never], never | null | undefined>, [number | null | undefined]>>,
 ]
 */
-export type FilterOut<T extends any[], U, ACC extends any[] = []> = T extends [infer F, ...infer REST]
+export type FilterOut<T extends any[], U, ACC extends any[] = []> = T extends [
+  infer F,
+  ...infer REST
+]
   ? [F] extends [U]
-  ? FilterOut<REST, U, ACC>
-  : FilterOut<REST, U, [...ACC, F]>
+    ? FilterOut<REST, U, ACC>
+    : FilterOut<REST, U, [...ACC, F]>
   : ACC;
 
 /*
@@ -199,7 +216,9 @@ type errors = [
   First<{ 0: 'arrayLike' }>,
 ]
 */
-export type First<T extends any[]> = T extends [infer First, ...infer REST] ? First : never;
+export type First<T extends any[]> = T extends [infer First, ...infer _]
+  ? First
+  : never;
 
 /*
 Example
@@ -215,7 +234,7 @@ type cases = [
   Length<'hello world'>,
 ]
 */
-export type Length<T extends readonly any[]> = T['length'];
+export type Length<T extends readonly any[]> = T["length"];
 
 /*
 Example
@@ -224,7 +243,7 @@ type cases = [
   Expect<Equal<Last<[() => 123, { a: string }]>, { a: string }>>,
 ]
 */
-export type Last<T extends any[]> = T extends [...infer RT, infer L] ? L : never;
+export type Last<T extends any[]> = T extends [...infer _, infer L] ? L : never;
 
 /*
 Example
@@ -238,8 +257,8 @@ type cases = [
 */
 export type LastIndexOf<T extends any[], U> = T extends [...infer RT, infer L]
   ? Equal<L, U> extends true
-  ? RT['length']
-  : LastIndexOf<RT, U>
+    ? RT["length"]
+    : LastIndexOf<RT, U>
   : -1;
 
 /*
@@ -258,7 +277,9 @@ type errors = [
   Head<{ 0: 'arrayLike' }>,
 ]
 */
-export type Head<T extends any[]> = T extends [infer HEAD, ...infer RT] ? HEAD : never;
+export type Head<T extends any[]> = T extends [infer HEAD, ...infer _]
+  ? HEAD
+  : never;
 
 /*
 Example
@@ -271,7 +292,9 @@ type cases = [
   Expect<Equal<Shift<['a', 'b', 'c', 'd']>, ['b', 'c', 'd']>>,
 ]
 */
-export type Shift<T extends any[], ACC = T> = T extends [infer REMOVED, ...(infer REST)] ? REST : [];
+export type Shift<T extends any[]> = T extends [infer _, ...infer REST]
+  ? REST
+  : [];
 
 /*
 Example
@@ -282,10 +305,14 @@ type cases = [
   Expect<Equal<Join<['o'], 'u'>, 'o'>>,
 ]
 */
-export type Join<T extends any[], U extends string | number, ACC extends string = ''> = T extends [infer A extends string, ...infer RT extends string[]]
-  ? RT['length'] extends 0
-  ? `${ACC}${A}`
-  : Join<RT, U, `${ACC}${A}${U}`>
+export type Join<
+  T extends any[],
+  U extends string | number,
+  ACC extends string = ""
+> = T extends [infer A extends string, ...infer RT extends string[]]
+  ? RT["length"] extends 0
+    ? `${ACC}${A}`
+    : Join<RT, U, `${ACC}${A}${U}`>
   : ACC;
 
 /*
@@ -309,10 +336,13 @@ type cases = [
   Expect<Equal<Includes<[undefined], null>, false>>,
 ]
 */
-export type Includes<T extends readonly any[], U> = T extends [infer F, ...infer RT]
+export type Includes<T extends readonly any[], U> = T extends [
+  infer F,
+  ...infer RT
+]
   ? Equal<F, U> extends true
-  ? true
-  : Includes<RT, U>
+    ? true
+    : Includes<RT, U>
   : false;
 
 /*
@@ -327,10 +357,14 @@ type cases = [
   Expect<Equal<IndexOf<[any, 1], 1>, 1>>,
 ]
 */
-export type IndexOf<T extends any[], U, ACC extends unknown[] = []> = T extends [infer F, ...infer RT]
+export type IndexOf<
+  T extends any[],
+  U,
+  ACC extends unknown[] = []
+> = T extends [infer F, ...infer RT]
   ? Equal<F, U> extends true
-  ? ACC['length']
-  : IndexOf<RT, U, [...ACC, unknown]>
+    ? ACC["length"]
+    : IndexOf<RT, U, [...ACC, unknown]>
   : -1;
 
 /*
@@ -351,7 +385,7 @@ type cases = [
   Expect<Equal<Pop<[]>, []>>,
 ]
 */
-export type Pop<T extends any[]> = T extends [...infer RT, infer L] ? RT : [];
+export type Pop<T extends any[]> = T extends [...infer RT, infer _] ? RT : [];
 
 /*
 Example:
@@ -377,7 +411,9 @@ type cases = [
   Expect<Equal<Reverse<['a', 'b', 'c']>, ['c', 'b', 'a']>>,
 ]
 */
-export type Reverse<T> = T extends [...infer H, infer T] ? [T, ...Reverse<H>] : [];
+export type Reverse<T> = T extends [...infer H, infer T]
+  ? [T, ...Reverse<H>]
+  : [];
 
 /*
 Example
@@ -416,8 +452,8 @@ type cases = [
 type error = TupleToObject<[[1,2], {}]>
 */
 export type TupleToObject<T extends ReadonlyArray<string | number>> = {
-  [Key in T[number]]: Key
-}
+  [Key in T[number]]: Key;
+};
 
 /*
 Example
@@ -428,7 +464,10 @@ type cases = [
   Expect<Equal<TupleToNestedObject<[], boolean>, boolean>>,
 ]
 */
-export type TupleToNestedObject<T extends any[], U> = T extends [infer A extends string, ...(infer REST)]
+export type TupleToNestedObject<T extends any[], U> = T extends [
+  infer A extends string,
+  ...infer REST
+]
   ? { [Key in A]: TupleToNestedObject<REST, U> }
   : U;
 
@@ -442,10 +481,13 @@ type cases = [
   Expect<Equal<Unique<[unknown, unknown, any, any, never, never]>, [unknown, any, never]>>,
 ]
 */
-export type Unique<T extends any[], ACC extends any[] = []> = T extends [infer F, ...infer RT]
+export type Unique<T extends any[], ACC extends any[] = []> = T extends [
+  infer F,
+  ...infer RT
+]
   ? IndexOf<ACC, F> extends -1
-  ? Unique<RT, [...ACC, F]>
-  : Unique<RT, ACC>
+    ? Unique<RT, [...ACC, F]>
+    : Unique<RT, ACC>
   : ACC;
 
 /*
@@ -456,16 +498,18 @@ type cases = [
   Expect<Equal<Without<[2, 3, 2, 3, 2, 3, 2, 3], [2, 3]>, []>>,
 ]
 */
-export type Without<T extends any[], U extends any[] | any> = T extends [infer F, ...infer RT]
-  ? U extends any[]                 // U is array like
-  ? F extends U[number]           // F in U array
-  ? Without<RT, U>                // exlcude F
-  : [F, ...Without<RT, U>]        // include F
-  : F extends U                   // U is not an array like
-  ? Without<RT, U>                // exlcude F
-  : [F, ...Without<RT, U>]        // include F
+export type Without<T extends any[], U extends any[] | any> = T extends [
+  infer F,
+  ...infer RT
+]
+  ? U extends any[] // U is array like
+    ? F extends U[number] // F in U array
+      ? Without<RT, U> // exlcude F
+      : [F, ...Without<RT, U>] // include F
+    : F extends U // U is not an array like
+    ? Without<RT, U> // exlcude F
+    : [F, ...Without<RT, U>] // include F
   : [];
-
 
 /*
 Example
@@ -479,6 +523,6 @@ type cases = [
 */
 export type Zip<T, U> = T extends [infer F1, ...infer R1]
   ? U extends [infer F2, ...infer R2]
-  ? [[F1, F2], ...Zip<R1, R2>]
-  : []
+    ? [[F1, F2], ...Zip<R1, R2>]
+    : []
   : [];

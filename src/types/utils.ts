@@ -1,5 +1,12 @@
-type FalsyValues = '' | [] | Record<PropertyKey, never> | 0 | false | undefined | null
-export type Space = ' ' | '\n' | '\t';
+export type FalsyValues =
+  | ""
+  | []
+  | Record<PropertyKey, never>
+  | 0
+  | false
+  | undefined
+  | null;
+export type Space = " " | "\n" | "\t";
 
 /*
 Example
@@ -15,11 +22,12 @@ type cases = [
   Expect<Equal<KebabCase<'😎'>, '😎'>>,
 ]
 */
-export type KebabCase<S extends string> = S extends `${infer First}${infer REST}` 
-  ? REST extends Uncapitalize<REST> 
-    ? `${Lowercase<First>}${KebabCase<REST>}`
-    : `${Lowercase<First>}-${KebabCase<REST>}`
-  : S;
+export type KebabCase<S extends string> =
+  S extends `${infer First}${infer REST}`
+    ? REST extends Uncapitalize<REST>
+      ? `${Lowercase<First>}${KebabCase<REST>}`
+      : `${Lowercase<First>}-${KebabCase<REST>}`
+    : S;
 
 /*
 Example
@@ -34,25 +42,30 @@ type cases = [
   Expect<Equal<CamelCase<'😎'>, '😎'>>,
 ]
 */
-type ToCamelCase<S extends string, ACC extends string = ''> = S extends `${infer F}${infer REST}`
-  ? F extends '_'
+type ToCamelCase<
+  S extends string,
+  ACC extends string = ""
+> = S extends `${infer F}${infer REST}`
+  ? F extends "_"
     ? ToCamelCase<Capitalize<REST>, `${ACC}`>
     : ToCamelCase<REST, `${ACC}${F}`>
   : ACC;
-export type CamelCase<S extends string> = ToCamelCase<Lowercase<S>>           // conver all chars to lower case first
+export type CamelCase<S extends string> = ToCamelCase<Lowercase<S>>; // conver all chars to lower case first
 
 /*
 Example:
 StringToUnion<"ABC"> = "" | "A" | "B" | "C"
 */
-export type StringToUnion<S extends string> = S extends `${infer A}${infer B}` ? A | StringToUnion<B>: '';
-export type LowerLetterUnion = StringToUnion<'abcdefghijklmnopqrstuvwxyz'>;
+export type StringToUnion<S extends string> = S extends `${infer A}${infer B}`
+  ? A | StringToUnion<B>
+  : "";
+export type LowerLetterUnion = StringToUnion<"abcdefghijklmnopqrstuvwxyz">;
 export type UpperLetterUnion = Uppercase<LowerLetterUnion>;
-export type Equal<T, U> = 
-  (<P>(x: P) => P extends T ? 1: 2) extends 
-  (<P>(x: P) => P extends U ? 1: 2) 
-    ? true
-    : false;
+export type Equal<T, U> = (<P>(x: P) => P extends T ? 1 : 2) extends <P>(
+  x: P
+) => P extends U ? 1 : 2
+  ? true
+  : false;
 /*
 Example:    
 type cases = [
@@ -61,12 +74,16 @@ type cases = [
   Expect<Equal<BEM<'btn', [], ['small', 'medium', 'large']>, 'btn--small' | 'btn--medium' | 'btn--large' >>,
 ]    
 */
-export type BEM<B extends string, E extends string[], M extends string[]> = M['length'] extends 0 
-  ? `${B}__${E[number]}` 
-  : E['length'] extends 0
-    ? `${B}--${M[number]}`
-    : `${B}__${E[number]}--${M[number]}`;
-    
+export type BEM<
+  B extends string,
+  E extends string[],
+  M extends string[]
+> = M["length"] extends 0
+  ? `${B}__${E[number]}`
+  : E["length"] extends 0
+  ? `${B}--${M[number]}`
+  : `${B}__${E[number]}--${M[number]}`;
+
 /*
  Example
  type PersonInfo = {
@@ -95,32 +112,35 @@ type cases = [
   Expect<Equal<ToPrimitive<PersonInfo>, ExpectedResult>>,
 ]
 */
-type ArrayToPrimitive<T extends any[], ACC extends any[] = []> = T extends [infer F, ...infer RT] 
-  ? [ValueToPrimitive<F>, ...ArrayToPrimitive<RT>] 
+type ArrayToPrimitive<T extends any[], ACC extends any[] = []> = T extends [
+  infer F,
+  ...infer RT
+]
+  ? [ValueToPrimitive<F>, ...ArrayToPrimitive<RT>]
   : ACC;
 type ObjectToPrimitive<T extends Record<PropertyKey, any>> = {
-  [Key in keyof T]: T[Key] extends Record<PropertyKey, any> 
-                      ? ObjectToPrimitive<T[Key]> 
-                      : ValueToPrimitive<T[Key]>
-}
-type ValueToPrimitive<T extends any> = T extends string 
-  ? string 
-  : T extends number 
-    ? number
-    : T extends boolean 
-      ? boolean
-      : T extends undefined 
-        ? undefined
-        : T extends null 
-          ? null
-          : never;
+  [Key in keyof T]: T[Key] extends Record<PropertyKey, any>
+    ? ObjectToPrimitive<T[Key]>
+    : ValueToPrimitive<T[Key]>;
+};
+type ValueToPrimitive<T extends any> = T extends string
+  ? string
+  : T extends number
+  ? number
+  : T extends boolean
+  ? boolean
+  : T extends undefined
+  ? undefined
+  : T extends null
+  ? null
+  : never;
 export type ToPrimitive<T extends Record<PropertyKey, any>> = {
-  [Key in keyof T]: T[Key] extends any[] 
-                      ? ArrayToPrimitive<T[Key]> 
-                      : T[Key] extends object 
-                        ? ObjectToPrimitive<T[Key]>
-                        : ValueToPrimitive<T[Key]>
-}
+  [Key in keyof T]: T[Key] extends any[]
+    ? ArrayToPrimitive<T[Key]>
+    : T[Key] extends object
+    ? ObjectToPrimitive<T[Key]>
+    : ValueToPrimitive<T[Key]>;
+};
 
 /*
 Example
@@ -129,8 +149,11 @@ type cases = [
   Expect<Equal<UnionToIntersection<(() => 'foo') | ((i: 42) => true)>, (() => 'foo') & ((i: 42) => true)>>,
 ]
 */
-export type UnionToIntersection<U> = (U extends any ? (x: U) => any: never) extends 
-  (x: infer R) => any ? R: never;
+export type UnionToIntersection<U> = (
+  U extends any ? (x: U) => any : never
+) extends (x: infer R) => any
+  ? R
+  : never;
 
 /*
 Example
@@ -149,9 +172,9 @@ type cases = [
 ] 
 */
 export type PathParams<S extends string> =
-S extends `/${string}/:${infer Param}/${infer REST}`
-  ? Param | PathParams<`/${REST}`>
-  : S extends `${string}/:${infer Param}`
+  S extends `/${string}/:${infer Param}/${infer REST}`
+    ? Param | PathParams<`/${REST}`>
+    : S extends `${string}/:${infer Param}`
     ? Param
     : never;
 
@@ -165,7 +188,7 @@ type cases = [
   Expect<Equal<IsAny<string>, false>>,
 ]
 */
-export type IsAny<T> = Equal<any, T>
+export type IsAny<T> = Equal<any, T>;
 
 /*
 Example:
@@ -178,13 +201,13 @@ type cases = [
   Expect<Equal<IsTuple<never>, false>>,
 ]
 */
-export type IsTuple<T> = [T] extends [never] 
+export type IsTuple<T> = [T] extends [never]
   ? false
-  : T extends readonly any[] 
-    ? any[] extends T 
-      ? false
-      : true
-    : false;
+  : T extends readonly any[]
+  ? any[] extends T
+    ? false
+    : true
+  : false;
 
 /*
 Example
@@ -198,7 +221,7 @@ type cases = [
   Expect<Equal<IsNever<{}>, false>>,
 ]
 */
-export type IsNever<T> = [T] extends [never] ? true: false;
+export type IsNever<T> = [T] extends [never] ? true : false;
 
 /*
 Example
@@ -210,26 +233,33 @@ type cases = [
   Expect<Equal<ToNumber<'18@7_$%'>, never>>,
 ]
 */
-export type ToNumber<S extends string, ACC extends unknown[] = []> = S extends `${number}`
-  ? S extends `${ACC['length']}`
-    ? ACC['length']
+export type ToNumber<
+  S extends string,
+  ACC extends unknown[] = []
+> = S extends `${number}`
+  ? S extends `${ACC["length"]}`
+    ? ACC["length"]
     : ToNumber<S, [...ACC, unknown]>
   : never;
-  
- /*
+
+/*
  Example
  type t = Nullable<{a: number, b: string}> // {a: number | null, b: string | null}
- */ 
- export type Nullable<T extends Record<PropertyKey, unknown>> = {
-    [K in keyof T]: T[K] | null
-}
+ */
+export type Nullable<T extends Record<PropertyKey, unknown>> = {
+  [K in keyof T]: T[K] | null;
+};
 
 /*
 Example
 type t = XOR<true, false> // true
 type t1 = XOR<true, true> // false
 */
-export type XOR<N extends boolean, M extends boolean> = 
-  [N, M] extends [true, true] ? false :
-  [N, M] extends [false, false] ? false :
-  true;
+export type XOR<N extends boolean, M extends boolean> = [N, M] extends [
+  true,
+  true
+]
+  ? false
+  : [N, M] extends [false, false]
+  ? false
+  : true;
