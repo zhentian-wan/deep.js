@@ -134,6 +134,12 @@ export type UnionToIntersection<U> = (U extends any ? (x: U) => any: never) exte
 
 /*
 Example
+ExtractValuesOfTuple<['a', 'b']>, 'a' | 'b'>
+*/
+export type ExtractValuesOfTuple<T extends any[]> = T[keyof T & number];
+
+/*
+Example
 type cases = [
   Expect<Equal<PathParams<"/profile">, never>>,
   Expect<Equal<PathParams<"/profile/:userId">, "userId">>,
