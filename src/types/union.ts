@@ -29,3 +29,12 @@ type cases = [
 // 参考：https://github.com/type-challenges/type-challenges/issues/10191
 // 3. 联合类型转换为元组
 export type UnionToTuple<U, Last = GetLastUnion<U>> = [U] extends [never] ? [] : [...UnionToTuple<Exclude<U, Last>>, Last];
+
+/*
+Example
+type cases = [
+  Expect<Equal<TupleToUnion<[123, '456', true]>, 123 | '456' | true>>,
+  Expect<Equal<TupleToUnion<[123]>, 123>>,
+]
+*/
+export type TupleToUnion<T extends any[]> = T extends [infer F, ...infer RT] ? F | TupleToUnion<RT> : never;

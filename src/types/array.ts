@@ -402,15 +402,6 @@ export type Subsequence<T extends any[]> = T extends [infer F, ...infer RT]
 
 /*
 Example
-type cases = [
-  Expect<Equal<TupleToUnion<[123, '456', true]>, 123 | '456' | true>>,
-  Expect<Equal<TupleToUnion<[123]>, 123>>,
-]
-*/
-export type TupleToUnion<T extends any[]> = T extends [infer F, ...infer RT] ? F | TupleToUnion<RT> : never;
-
-/*
-Example
 const tuple = ['tesla', 'model 3', 'model X', 'model Y'] as const
 const tupleNumber = [1, 2, 3, 4] as const
 const tupleMix = [1, '2', 3, '4'] as const
