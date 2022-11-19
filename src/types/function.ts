@@ -39,6 +39,6 @@ type cases = [
   Expect<Equal<typeof longOutput, 'a-b-c-d-e-f-g-h'>>,
 ]
 */
-export declare function join<J extends string>(
-  delimiter: J
-): <Args extends string[]>(...parts: Args) => Join<Args, J>;
+export declare function join<S extends string>(
+  delimiter: S
+): <Args extends string[]>(...parts: Args) => Join<Args, S>;
