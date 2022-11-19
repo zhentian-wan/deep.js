@@ -1,3 +1,5 @@
+import { Join } from "./string";
+
 /*
 Example
 type cases = [
@@ -7,6 +9,36 @@ type cases = [
   AppendArgument<unknown, undefined>,
 ]
 */
-export type AppendArgument<Fn extends (...args: any[]) => void, A> = Fn extends (...args: infer Args) => infer RT 
+export type AppendArgument<
+  Fn extends (...args: any[]) => void,
+  A
+> = Fn extends (...args: infer Args) => infer RT
   ? (...x: [...Args, A]) => RT
-  : never; 
+  : never;
+
+/*
+Example
+// Edge cases
+const noCharsOutput = join('-')()
+const oneCharOutput = join('-')('a')
+const noDelimiterOutput = join('')('a', 'b', 'c')
+
+// Regular cases
+const hyphenOutput = join('-')('a', 'b', 'c')
+const hashOutput = join('#')('a', 'b', 'c')
+const twoCharOutput = join('-')('a', 'b')
+const longOutput = join('-')('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+
+type cases = [
+  Expect<Equal<typeof noCharsOutput, ''>>,
+  Expect<Equal<typeof oneCharOutput, 'a'>>,
+  Expect<Equal<typeof noDelimiterOutput, 'abc'>>,
+  Expect<Equal<typeof twoCharOutput, 'a-b'>>,
+  Expect<Equal<typeof hyphenOutput, 'a-b-c'>>,
+  Expect<Equal<typeof hashOutput, 'a#b#c'>>,
+  Expect<Equal<typeof longOutput, 'a-b-c-d-e-f-g-h'>>,
+]
+*/
+export declare function join<J extends string>(
+  delimiter: J
+): <Args extends string[]>(...parts: Args) => Join<Args, J>;

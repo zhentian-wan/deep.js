@@ -1,4 +1,4 @@
-import type { Space, UpperLetterUnion, StringToUnion } from './utils'
+import type { Space, UpperLetterUnion, StringToUnion } from "./utils";
 
 /*
 Example
@@ -13,10 +13,14 @@ type cases = [
   Expect<Equal<CapitalizeWords<''>, ''>>,
 ]
 */
-export type CapitalizeWords<S extends string, Prev extends string = '', ACC extends string = ''> = S extends `${infer First}${infer REST}`
-  ? Uppercase<Prev> extends UpperLetterUnion                     // only symbols and space cannnot be uppercased
-    ? CapitalizeWords<REST, First, `${ACC}${First}`>                // prev is char, the follow char not need to be uppercased
-    : CapitalizeWords<REST, First, `${ACC}${Uppercase<First>}`>     // pre is symbol, current char should be uppercased  
+export type CapitalizeWords<
+  S extends string,
+  Prev extends string = "",
+  ACC extends string = ""
+> = S extends `${infer First}${infer REST}`
+  ? Uppercase<Prev> extends UpperLetterUnion // only symbols and space cannnot be uppercased
+    ? CapitalizeWords<REST, First, `${ACC}${First}`> // prev is char, the follow char not need to be uppercased
+    : CapitalizeWords<REST, First, `${ACC}${Uppercase<First>}`> // pre is symbol, current char should be uppercased
   : ACC;
 
 /*
@@ -28,12 +32,29 @@ type cases = [
   Expect<Equal<LengthOfString<'Sound! Euphonium'>, 16>>,
 ]
 */
-export type LengthOfString<S extends string, ACC extends unknown[] = []> = S extends `${string}${string}${string}${string}${string}${string}${string}${string}${string}${string}${infer REST}`
-  ? LengthOfString<REST, [...ACC, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown]>
+export type LengthOfString<
+  S extends string,
+  ACC extends unknown[] = []
+> = S extends `${string}${string}${string}${string}${string}${string}${string}${string}${string}${string}${infer REST}`
+  ? LengthOfString<
+      REST,
+      [
+        ...ACC,
+        unknown,
+        unknown,
+        unknown,
+        unknown,
+        unknown,
+        unknown,
+        unknown,
+        unknown,
+        unknown,
+        unknown
+      ]
+    >
   : S extends `${string}${infer REST}`
-    ? LengthOfString<REST, [...ACC, unknown]>
-    : ACC['length'];
-
+  ? LengthOfString<REST, [...ACC, unknown]>
+  : ACC["length"];
 
 /*
 Example:
@@ -47,7 +68,10 @@ type cases = [
   Expect<Equal<StartsWith<'', ''>, true>>,
 ]
 */
-export type StartsWith<T extends string, U extends string> = T extends `${U}${string}` ? true: false;
+export type StartsWith<
+  T extends string,
+  U extends string
+> = T extends `${U}${string}` ? true : false;
 
 /*
 Example:
@@ -57,19 +81,32 @@ type cases = [
   Expect<Equal<EndsWith<'abc', 'd'>, false>>,
 ]
 */
-export type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true: false;
-
+export type EndsWith<
+  T extends string,
+  U extends string
+> = T extends `${string}${U}` ? true : false;
 
 export type Combinations<T extends string, U = T> = U extends T
   ? U | `${U}${Combinations<Exclude<T, U>>}`
   : never;
+
+export type Join<
+  T extends unknown[],
+  U extends string,
+  ACC extends string = ""
+> = T extends [infer F extends string, ...infer RT]
+  ? ACC extends ""
+    ? Join<RT, U, `${F}`>
+    : Join<RT, U, `${ACC}${U}${F}`>
+  : ACC;
+
 /*
 Example:
 type cases = [
-  Expect<Equal<AllCombinations<''>, ''>>,
-  Expect<Equal<AllCombinations<'A'>, '' | 'A'>>,
-  Expect<Equal<AllCombinations<'AB'>, '' | 'A' | 'B' | 'AB' | 'BA'>>,
-  Expect<Equal<AllCombinations<'ABC'>, '' | 'A' | 'B' | 'C' | 'AB' | 'AC' | 'BA' | 'BC' | 'CA' | 'CB' | 'ABC' | 'ACB' | 'BAC' | 'BCA' | 'CAB' | 'CBA'>>
+  Expect<Equal<Permutations<''>, ''>>,
+  Expect<Equal<Permutations<'A'>, '' | 'A'>>,
+  Expect<Equal<Permutations<'AB'>, '' | 'A' | 'B' | 'AB' | 'BA'>>,
+  Expect<Equal<Permutations<'ABC'>, '' | 'A' | 'B' | 'C' | 'AB' | 'AC' | 'BA' | 'BC' | 'CA' | 'CB' | 'ABC' | 'ACB' | 'BAC' | 'BCA' | 'CAB' | 'CBA'>>
 ]
 */
 export type Permutations<S extends string> = Combinations<StringToUnion<S>>;
@@ -85,9 +122,13 @@ type cases = [
   Expect<Equal<Replace<'', '', ''>, ''>>,
 ]
 */
-export type Replace<S extends string, From extends string, To extends string> = From extends '' 
-? S
-: S extends `${infer A}${From}${infer B}`
+export type Replace<
+  S extends string,
+  From extends string,
+  To extends string
+> = From extends ""
+  ? S
+  : S extends `${infer A}${From}${infer B}`
   ? `${A}${To}${B}`
   : S;
 
@@ -105,8 +146,8 @@ type cases = [
 ]
 */
 export type Trim<S extends string> = S extends `${Space}${infer Word}`
-? Trim<Word>
-: S extends `${infer Word}${Space}`
+  ? Trim<Word>
+  : S extends `${infer Word}${Space}`
   ? Trim<Word>
   : S;
 
@@ -123,8 +164,8 @@ type cases = [
 ]
 */
 export type TrimLeft<S extends string> = S extends `${Space}${infer RT}`
-? TrimLeft<RT>
-: S;
+  ? TrimLeft<RT>
+  : S;
 
 /*
 Example
@@ -140,11 +181,15 @@ type cases = [
   Expect<Equal<ReplaceAll<'', '', ''>, ''>>,
 ]
 */
-export type ReplaceAll<S extends string, From extends string, To extends string> = From extends ''
+export type ReplaceAll<
+  S extends string,
+  From extends string,
+  To extends string
+> = From extends ""
   ? S
   : S extends `${infer A}${From}${infer B}`
-    ? `${A}${To}${ReplaceAll<B, From, To>}`
-    : S;
+  ? `${A}${To}${ReplaceAll<B, From, To>}`
+  : S;
 
 /*
 Example
@@ -158,6 +203,6 @@ type cases = [
   Expect<Equal<TrimRight<'\n\t '>, ''>>,
 ]
 */
-export type TrimRight<S extends string> = S extends `${infer Left}${Space}` 
+export type TrimRight<S extends string> = S extends `${infer Left}${Space}`
   ? TrimRight<Left>
   : S;
