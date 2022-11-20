@@ -564,3 +564,37 @@ type cases = [
 export type RequiredKeys<T extends Record<PropertyKey, any>> = keyof {
   [Key in keyof T as T[Key] extends Required<T>[Key] ? Key: never]: any
 }
+
+/*
+Example
+const obj = {
+  name: "John",
+  age: 33,
+  cars: [
+    { make: "Ford", age: 10 },
+    { make: "Tesla", age: 2 },
+  ],
+} as const;
+
+declare function getProp<T, P extends PathKeys<T>>(
+  obj: T,
+  path: P
+): PropType<T, P>;
+
+const make = getProp(obj, 'cars.0.make') // const make: "Ford"
+*/
+export type PathKeys<T> = T extends readonly any[]
+  ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>>
+  : T extends object
+  ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>>
+  : never;
+
+export type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+
+export type PropType<T, Path extends string> = Path extends keyof T
+  ? T[Path]
+  : Path extends `${infer K}.${infer RT}`
+  ? K extends keyof T
+    ? PropType<T[K], RT>
+    : unknown
+  : unknown;
