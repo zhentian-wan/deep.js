@@ -1,3 +1,4 @@
+import type {UnionToIntersection} from './utils'
 /* Object */
 
 /*
@@ -48,6 +49,46 @@ type cases = [
 export type AppendToObject<T extends Record<PropertyKey, any>, U extends string | number | symbol, V extends any> = MergeObject<T & {
   [Key in U]: V  
 }>
+
+/*
+Example
+type Obj = {
+  a: number
+  b: string
+  c: boolean
+  obj: {
+    d: number
+    e: string
+    f: boolean
+    obj2: {
+      g: number
+      h: string
+      i: boolean
+    }
+  }
+  obj3: {
+    j: number
+    k: string
+    l: boolean
+  }
+}
+
+type cases = [
+  Expect<Equal<DeepPick<Obj, ''>, unknown>>,
+  Expect<Equal<DeepPick<Obj, 'a'>, { a: number }>>,
+  Expect<Equal<DeepPick<Obj, 'a' | ''>, { a: number } & unknown>>,
+  Expect<Equal<DeepPick<Obj, 'a' | 'obj.e'>, { a: number } & { obj: { e: string } }>>,
+  Expect<Equal<DeepPick<Obj, 'a' | 'obj.e' | 'obj.obj2.i'>, { a: number } & { obj: { e: string } } & { obj: { obj2: { i: boolean } } }>>,
+]
+*/
+export type PropPath<T, U> = U extends keyof T
+  ? {[Key in U]: T[Key]}
+  : U extends `${infer P}.${infer RT}`
+    ? P extends keyof T
+      ? {[Key in P]: PropPath<T[Key], RT>}
+      : never
+    :never;
+type DeepPick<T, U> = UnionToIntersection<PropPath<T, U>>
 
 /*
 Example
