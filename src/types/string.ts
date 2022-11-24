@@ -3,6 +3,18 @@ import type { Space, UpperLetterUnion, StringToUnion } from "./utils";
 /*
 Example
 type cases = [
+  Expect<Equal<CamelizeWord<'foobar'>, 'foobar'>>,
+  Expect<Equal<CamelizeWord<'foo_bar'>, 'fooBar'>>,
+  Expect<Equal<CamelizeWord<'foo_bar_baz'>, 'fooBarBaz'>>,
+]
+*/
+export type CamelizeWord<S> = S extends `${infer F}_${infer RT}` 
+  ? `${F}${CamelizeWord<Capitalize<RT>>}`
+  : S;
+
+/*
+Example
+type cases = [
   Expect<Equal<CapitalizeWords<'foobar'>, 'Foobar'>>,
   Expect<Equal<CapitalizeWords<'FOOBAR'>, 'FOOBAR'>>,
   Expect<Equal<CapitalizeWords<'foo bar'>, 'Foo Bar'>>,
