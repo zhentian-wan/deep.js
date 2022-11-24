@@ -15,6 +15,25 @@ export type CamelizeWord<S> = S extends `${infer F}_${infer RT}`
 /*
 Example
 type cases = [
+  Expect<Equal<DropString<'butter fly!', ''>, 'butter fly!'>>,
+  Expect<Equal<DropString<'butter fly!', ' '>, 'butterfly!'>>,
+  Expect<Equal<DropString<'butter fly!', 'but'>, 'er fly!'>>,
+  Expect<Equal<DropString<' b u t t e r f l y ! ', 'but'>, '     e r f l y ! '>>,
+  Expect<Equal<DropString<'    butter fly!        ', ' '>, 'butterfly!'>>,
+  Expect<Equal<DropString<' b u t t e r f l y ! ', ' '>, 'butterfly!'>>,
+  Expect<Equal<DropString<' b u t t e r f l y ! ', 'but'>, '     e r f l y ! '>>,
+  Expect<Equal<DropString<' b u t t e r f l y ! ', 'tub'>, '     e r f l y ! '>>,
+  Expect<Equal<DropString<' b u t t e r f l y ! ', 'b'>, '  u t t e r f l y ! '>>,
+  Expect<Equal<DropString<' b u t t e r f l y ! ', 't'>, ' b u   e r f l y ! '>>,
+]
+*/
+export type DropString<S, R> = R extends '' ? S : S extends `${infer F}${infer RT}`
+  ? F extends StringToUnion<R> ? DropString<RT, R>: `${F}${ DropString<RT, R>}` 
+  : S;
+
+/*
+Example
+type cases = [
   Expect<Equal<CapitalizeWords<'foobar'>, 'Foobar'>>,
   Expect<Equal<CapitalizeWords<'FOOBAR'>, 'FOOBAR'>>,
   Expect<Equal<CapitalizeWords<'foo bar'>, 'Foo Bar'>>,
