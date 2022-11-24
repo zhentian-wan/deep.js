@@ -1,3 +1,5 @@
+import type {CamelizeWord} from './string';
+
 export type FalsyValues =
   | ""
   | []
@@ -7,6 +9,39 @@ export type FalsyValues =
   | undefined
   | null;
 export type Space = " " | "\n" | "\t";
+
+/*
+Example
+type cases = [
+  Expect<Equal<
+    Camelize<{
+      some_prop: string
+      prop: { another_prop: string }
+      array: [
+        { snake_case: string },
+        { another_element: { yet_another_prop: string } },
+        { yet_another_element: string },
+      ]
+    }>,
+    {
+      someProp: string
+      prop: { anotherProp: string }
+      array: [
+        { snakeCase: string },
+        { anotherElement: { yetAnotherProp: string } },
+        { yetAnotherElement: string },
+      ]
+    }
+  >>,
+]
+*/
+export type Camelize<T> = T extends any[] 
+  ? T extends [infer F, ...infer RT]
+    ? [Camelize<F>, ...Camelize<RT>]
+    : []
+  : {
+    [Key in keyof T as Key extends string ? `${CamelizeWord<Key>}`: never]: T[Key] extends object ? Camelize<T[Key]> : T[Key]                 
+  };
 
 /*
 Example
