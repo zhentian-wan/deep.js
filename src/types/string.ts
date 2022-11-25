@@ -1,4 +1,4 @@
-import type { Space, UpperLetterUnion, StringToUnion } from "./utils";
+import type { Equal, Space, UpperLetterUnion, StringToUnion } from "./utils";
 
 /*
 Example
@@ -221,6 +221,27 @@ export type ReplaceAll<
   : S extends `${infer A}${From}${infer B}`
   ? `${A}${To}${ReplaceAll<B, From, To>}`
   : S;
+
+/*
+Example
+type cases = [
+  Expect<Equal<Split<'Hi! How are you?', 'z'>, ['Hi! How are you?']>>,
+  Expect<Equal<Split<'Hi! How are you?', ' '>, ['Hi!', 'How', 'are', 'you?']>>,
+  Expect<Equal<Split<'Hi! How are you?', ''>, ['H', 'i', '!', ' ', 'H', 'o', 'w', ' ', 'a', 'r', 'e', ' ', 'y', 'o', 'u', '?']>>,
+  Expect<Equal<Split<'', ''>, []>>,
+  Expect<Equal<Split<'', 'z'>, ['']>>,
+  Expect<Equal<Split<string, 'whatever'>, string[]>>,
+]
+*/
+export type Split<S extends string, SEP extends string> = Equal<S, string> extends true
+  ? S[]
+  : S extends `${infer P}${SEP}${infer RT}`
+    ? [P, ...Split<RT, SEP>]
+    : S extends ''
+      ? SEP extends ''
+        ? []
+        : [S]
+      : [S];
 
 /*
 Example
