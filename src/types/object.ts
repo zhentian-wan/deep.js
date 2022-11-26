@@ -1,4 +1,4 @@
-import type {UnionToIntersection} from './utils'
+import type {Equal, UnionToIntersection} from './utils'
 /* Object */
 
 /*
@@ -604,7 +604,17 @@ type cases = [
 */
 export type RequiredKeys<T extends Record<PropertyKey, any>> = keyof {
   [Key in keyof T as T[Key] extends Required<T>[Key] ? Key: never]: any
+
 }
+/*
+Example:
+type cases = [
+  Expect<Equal<IsRequiredKey<{ a: number; b?: string }, 'a'>, true>>,
+  Expect<Equal<IsRequiredKey<{ a: number; b?: string }, 'b'>, false>>,
+  Expect<Equal<IsRequiredKey<{ a: number; b?: string }, 'b' | 'a'>, false>>,
+]
+*/
+export type IsRequiredKey<T, K extends keyof T> = Equal<K,RequiredKeys<T>> extends true ? true : false;
 
 /*
 Example
