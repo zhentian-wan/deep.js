@@ -618,6 +618,29 @@ export type IsRequiredKey<T, K extends keyof T> = Equal<K,RequiredKeys<T>> exten
 
 /*
 Example
+type cases = [
+  Expect<Equal<'title', ReadonlyKeys<Todo1>>>,
+  Expect<Equal<'title' | 'description', ReadonlyKeys<Todo2>>>,
+]
+
+interface Todo1 {
+  readonly title: string
+  description: string
+  completed: boolean
+}
+
+interface Todo2 {
+  readonly title: string
+  readonly description: string
+  completed?: boolean
+}
+*/
+export type ReadonlyKeys<T> = keyof {
+  [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true ? Key: never]: T[Key]
+}
+
+/*
+Example
 const obj = {
   name: "John",
   age: 33,
