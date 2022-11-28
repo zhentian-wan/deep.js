@@ -582,6 +582,24 @@ export type ObjectEntries<T extends object> = {
 
 /*
 Example
+interface Model {
+  name: string
+  age: number
+  locations: string[] | null
+}
+
+type ModelEntries = ['name', string] | ['age', number] | ['locations', string[] | null]
+
+type cases = [
+  Expect<Equal<ObjectFromEntries<ModelEntries>, Model>>,
+]
+*/
+export type ObjectFromEntries<T extends any[]> = {
+  [Key in T as Key extends any[] ? Key[0] extends string ? Key[0]: never: never]: Key[1]
+}
+
+/*
+Example
 type cases = [
   Expect<Equal<OptionalKeys<{ a: number; b?: string }>, 'b'>>,
   Expect<Equal<OptionalKeys<{ a: undefined; b?: undefined }>, 'b'>>,
