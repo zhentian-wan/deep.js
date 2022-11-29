@@ -1,3 +1,6 @@
+import type {Equal} from './utils';
+import type {Split} from './string';
+import type {Reverse, Join} from 'array';
 /*
 Example:
 const tree1 = {
@@ -99,3 +102,9 @@ export type OnPropChnagedMethods<T> = {
     cb: (newValue: T[Key]) => void
   ) => void;
 };
+
+/*
+Example
+
+*/
+export type IsPalindrome<T extends string | number> = Equal<`${T}`, Join<Reverse<Split<`${T}`, ''>>, ''>>
