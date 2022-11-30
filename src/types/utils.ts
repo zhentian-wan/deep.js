@@ -1,4 +1,4 @@
-import type {CamelizeWord} from './string';
+import type { CamelizeWord } from "./string";
 
 export type FalsyValues =
   | ""
@@ -35,13 +35,15 @@ type cases = [
   >>,
 ]
 */
-export type Camelize<T> = T extends any[] 
+export type Camelize<T> = T extends any[]
   ? T extends [infer F, ...infer RT]
     ? [Camelize<F>, ...Camelize<RT>]
     : []
   : {
-    [Key in keyof T as Key extends string ? `${CamelizeWord<Key>}`: never]: T[Key] extends object ? Camelize<T[Key]> : T[Key]                 
-  };
+      [Key in keyof T as Key extends string
+        ? `${CamelizeWord<Key>}`
+        : never]: T[Key] extends object ? Camelize<T[Key]> : T[Key];
+    };
 
 /*
 Example
@@ -158,7 +160,7 @@ type ObjectToPrimitive<T extends Record<PropertyKey, any>> = {
     ? ObjectToPrimitive<T[Key]>
     : ValueToPrimitive<T[Key]>;
 };
-type ValueToPrimitive<T extends any> = T extends string
+type ValueToPrimitive<T> = T extends string
   ? string
   : T extends number
   ? number

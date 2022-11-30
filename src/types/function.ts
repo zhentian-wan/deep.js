@@ -1,4 +1,4 @@
-import { Join } from "./string";
+import { ConcatString } from "./string";
 
 /*
 Example
@@ -41,4 +41,4 @@ type cases = [
 */
 export declare function join<S extends string>(
   delimiter: S
-): <Args extends string[]>(...parts: Args) => Join<Args, S>;
+): <Args extends string[]>(...parts: Args) => ConcatString<Args, S>;

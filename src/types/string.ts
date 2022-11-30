@@ -8,9 +8,19 @@ type cases = [
   Expect<Equal<CamelizeWord<'foo_bar_baz'>, 'fooBarBaz'>>,
 ]
 */
-export type CamelizeWord<S> = S extends `${infer F}_${infer RT}` 
+export type CamelizeWord<S> = S extends `${infer F}_${infer RT}`
   ? `${F}${CamelizeWord<Capitalize<RT>>}`
   : S;
+
+export type ConcatString<
+  T extends unknown[],
+  U extends string,
+  ACC extends string = ""
+> = T extends [infer F extends string, ...infer RT]
+  ? ACC extends ""
+    ? ConcatString<RT, U, `${F}`>
+    : ConcatString<RT, U, `${ACC}${U}${F}`>
+  : ACC;
 
 /*
 Example
@@ -27,8 +37,12 @@ type cases = [
   Expect<Equal<DropString<' b u t t e r f l y ! ', 't'>, ' b u   e r f l y ! '>>,
 ]
 */
-export type DropString<S, R> = R extends '' ? S : S extends `${infer F}${infer RT}`
-  ? F extends StringToUnion<R> ? DropString<RT, R>: `${F}${ DropString<RT, R>}` 
+export type DropString<S, R extends string> = R extends ""
+  ? S
+  : S extends `${infer F}${infer RT}`
+  ? F extends StringToUnion<R>
+    ? DropString<RT, R>
+    : `${F}${DropString<RT, R>}`
   : S;
 
 /*
@@ -120,16 +134,6 @@ export type EndsWith<
 export type Combinations<T extends string, U = T> = U extends T
   ? U | `${U}${Combinations<Exclude<T, U>>}`
   : never;
-
-export type Join<
-  T extends unknown[],
-  U extends string,
-  ACC extends string = ""
-> = T extends [infer F extends string, ...infer RT]
-  ? ACC extends ""
-    ? Join<RT, U, `${F}`>
-    : Join<RT, U, `${ACC}${U}${F}`>
-  : ACC;
 
 /*
 Example:
@@ -233,15 +237,18 @@ type cases = [
   Expect<Equal<Split<string, 'whatever'>, string[]>>,
 ]
 */
-export type Split<S extends string, SEP extends string> = Equal<S, string> extends true
+export type Split<S extends string, SEP extends string> = Equal<
+  S,
+  string
+> extends true
   ? S[]
   : S extends `${infer P}${SEP}${infer RT}`
-    ? [P, ...Split<RT, SEP>]
-    : S extends ''
-      ? SEP extends ''
-        ? []
-        : [S]
-      : [S];
+  ? [P, ...Split<RT, SEP>]
+  : S extends ""
+  ? SEP extends ""
+    ? []
+    : [S]
+  : [S];
 
 /*
 Example
