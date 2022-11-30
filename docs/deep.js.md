@@ -4,8 +4,6 @@
 
 ## deep.js package
 
-A small library for common math functions
-
 ## Functions
 
 |  Function | Description |
@@ -13,6 +11,12 @@ A small library for common math functions
 |  [avg(a, b, c)](./deep.js.avg.md) | Calculate the average of three numbers |
 |  [deepFreeze(obj)](./deep.js.deepfreeze.md) | Deep freeze nested object |
 |  [sum3(a, b, c)](./deep.js.sum3.md) | <b><i>(BETA)</i></b> Calculate the sum of three numbers |
+
+## Namespaces
+
+|  Namespace | Description |
+|  --- | --- |
+|  [types](./deep.js.types.md) |  |
 
 ## Type Aliases
 

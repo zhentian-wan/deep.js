@@ -8,5 +8,5 @@
 
 |  Package | Description |
 |  --- | --- |
-|  [deep.js](./deep.js.md) | A small library for common math functions |
+|  [deep.js](./deep.js.md) |  |
 
