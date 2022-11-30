@@ -1,4 +1,4 @@
-import type {Equal, UnionToIntersection} from './utils'
+import type { Equal, UnionToIntersection } from "./utils";
 /* Object */
 
 /*
@@ -46,9 +46,15 @@ type cases = [
   Expect<Equal<AppendToObject<test3, 'isMotherRussia', false | undefined>, testExpect3>>,
 ]
 */
-export type AppendToObject<T extends Record<PropertyKey, any>, U extends string | number | symbol, V extends any> = MergeObject<T & {
-  [Key in U]: V  
-}>
+export type AppendToObject<
+  T extends Record<PropertyKey, any>,
+  U extends string | number | symbol,
+  V extends any
+> = MergeObject<
+  T & {
+    [Key in U]: V;
+  }
+>;
 
 /*
 Example
@@ -82,13 +88,13 @@ type cases = [
 ]
 */
 export type PropPath<T, U> = U extends keyof T
-  ? {[Key in U]: T[Key]}
+  ? { [Key in U]: T[Key] }
   : U extends `${infer P}.${infer RT}`
-    ? P extends keyof T
-      ? {[Key in P]: PropPath<T[Key], RT>}
-      : never
-    :never;
-type DeepPick<T, U> = UnionToIntersection<PropPath<T, U>>
+  ? P extends keyof T
+    ? { [Key in P]: PropPath<T[Key], RT> }
+    : never
+  : never;
+export type DeepPick<T, U> = UnionToIntersection<PropPath<T, U>>;
 
 /*
 Example
@@ -142,23 +148,25 @@ type Expected = {
   }
 }
 */
-export type DeepReadonly<T extends Record<PropertyKey, any>> = T extends (...args: any[]) => any
+export type DeepReadonly<T extends Record<PropertyKey, any>> = T extends (
+  ...args: any[]
+) => any
   ? T
   : {
-    readonly [Key in keyof T]: DeepReadonly<T[Key]>
-  };
+      readonly [Key in keyof T]: DeepReadonly<T[Key]>;
+    };
 
 export type DeepPartial<T> = T extends Function
   ? T
   : T extends Array<infer InferredArrayMember>
-    ? DeepPartialArray<InferredArrayMember>
-    : T extends object
-      ? DeepPartialObject<T>
-        : T | undefined;
-interface DeepPartialArray<T> extends Array<DeepPartial<T>> {}
+  ? DeepPartialArray<InferredArrayMember>
+  : T extends object
+  ? DeepPartialObject<T>
+  : T | undefined;
+type DeepPartialArray<T> = Array<DeepPartial<T>>;
 type DeepPartialObject<T> = {
-  [Key in keyof T]?: DeepPartial<T[Key]>
-}
+  [Key in keyof T]?: DeepPartial<T[Key]>;
+};
 
 /*
 Example
@@ -236,10 +244,12 @@ type errors = [
   DeepMutable<0>,
 ]
 */
-export type DeepMutable<T extends Record<PropertyKey,any>> = T extends (...args: any[]) => any 
-  ? T 
+export type DeepMutable<T extends Record<PropertyKey, any>> = T extends (
+  ...args: any[]
+) => any
+  ? T
   : {
-      - readonly [K in keyof T] : DeepMutable<T[K]>
+      -readonly [K in keyof T]: DeepMutable<T[K]>;
     };
 
 /*
@@ -266,7 +276,7 @@ type cases = [
 ]
 */
 export type Diff<T, S> = {
-  [K in Exclude<(keyof T | keyof S), (keyof T & keyof S)>]: (T & S)[K]
+  [K in Exclude<keyof T | keyof S, keyof T & keyof S>]: (T & S)[K];
 };
 
 /*
@@ -291,11 +301,14 @@ type cases = [
   Expect<Equal<Get<Data, 'no.existed'>, never>>,
 ]
 */
-export type Get<T extends Record<PropertyKey, any>, K extends string> = K extends keyof T
+export type Get<
+  T extends Record<PropertyKey, any>,
+  K extends string
+> = K extends keyof T
   ? T[K]
   : K extends `${infer P}.${infer U}`
-    ? Get<T[P], U>
-    : never;
+  ? Get<T[P], U>
+  : never;
 
 /*
 Example
@@ -305,7 +318,7 @@ type cases = [
 ]
 */
 export type GetRequired<T extends Record<PropertyKey, any>> = {
-  [Key in keyof T as T[Key] extends Required<T>[Key] ? Key: never]: T[Key]
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? Key : never]: T[Key];
 };
 
 /*
@@ -316,7 +329,7 @@ type cases = [
 ]
 */
 export type GetOptional<T extends Record<PropertyKey, any>> = {
-  [Key in keyof T as T[Key] extends Required<T>[Key] ? never: Key]: T[Key]
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? never : Key]: T[Key];
 };
 
 /*
@@ -367,18 +380,25 @@ type cases = [
   Expect<Equal<LookUp<Animal, {kind: 'cat'}>, Cat>>,
 ]
 */
-type LookUpKey<U extends {[Key in K]: string}, T extends string, K extends string = 'type'> = U extends {[Key in K]: T} ? U : never;
-type LookUpLike<U extends Record<PropertyKey, any>, T extends Record<PropertyKey, any>> = U extends T ? U : never;
+type LookUpKey<
+  U extends { [Key in K]: string },
+  T extends string,
+  K extends string = "type"
+> = U extends { [Key in K]: T } ? U : never;
+type LookUpLike<
+  U extends Record<PropertyKey, any>,
+  T extends Record<PropertyKey, any>
+> = U extends T ? U : never;
 
 export type LookUp<
-  U extends Record<PropertyKey, any>, 
-  T extends Record<PropertyKey, any> | string, 
-  K extends string = 'type'
-> = T extends Record<PropertyKey, any> 
-      ? LookUpLike<U, T>
-      : T extends string
-        ? LookUpKey<U, T, K>
-        : never;
+  U extends Record<PropertyKey, any>,
+  T extends Record<PropertyKey, any> | string,
+  K extends string = "type"
+> = T extends Record<PropertyKey, any>
+  ? LookUpLike<U, T>
+  : T extends string
+  ? LookUpKey<U, T, K>
+  : never;
 
 /*
 Example
@@ -409,8 +429,9 @@ type cases = [
 */
 export type PartialByKeys<T, K extends keyof T = keyof T> = MergeObject<
   Omit<T, K> & {
-  [P in keyof T as P extends K ? P : never]?: T[P];
-}>;
+    [P in keyof T as P extends K ? P : never]?: T[P];
+  }
+>;
 
 export type MergeObject<T> = { [P in keyof T]: T[P] };
 
@@ -433,8 +454,15 @@ type cases = [
   }>>,
 ]
 */
-export type Merge<F extends Record<PropertyKey, any>, S extends Record<PropertyKey, any>> = {
-  [Key in keyof (F & S)]: Key extends keyof S ? S[Key] : Key extends keyof F ? F[Key]: never
+export type Merge<
+  F extends Record<PropertyKey, any>,
+  S extends Record<PropertyKey, any>
+> = {
+  [Key in keyof (F & S)]: Key extends keyof S
+    ? S[Key]
+    : Key extends keyof F
+    ? F[Key]
+    : never;
 };
 
 /*
@@ -453,8 +481,8 @@ type cases = [
 ]
 */
 export type PickByType<T extends object, U> = {
-  [Key in keyof T as T[Key] extends U ? Key: never]: T[Key]
-}
+  [Key in keyof T as T[Key] extends U ? Key : never]: T[Key];
+};
 
 /*
 Example:
@@ -472,8 +500,8 @@ type cases = [
 ]
 */
 export type OmitByType<T extends object, U> = {
-  [Key in keyof T as T[Key] extends U ? never: Key]: T[Key]
-}
+  [Key in keyof T as T[Key] extends U ? never : Key]: T[Key];
+};
 
 /*
 Example
@@ -505,10 +533,10 @@ type cases = [
 */
 export type RequiredByKeys<T, K extends keyof T = keyof T> = MergeObject<
   Omit<T, K> & {
-    [Key in keyof T as Key extends K ? Key: never]-?: T[Key]
+    [Key in keyof T as Key extends K ? Key : never]-?: T[Key];
   }
->
-  
+>;
+
 /*
 Example
 type cases = [
@@ -521,15 +549,18 @@ type cases = [
   Expect<Equal<MapTypes<{ name: string }, { mapFrom: boolean; mapTo: never }>, { name: string }>>,
   Expect<Equal<MapTypes<{ name: string; date: Date }, { mapFrom: string; mapTo: boolean } | { mapFrom: Date; mapTo: string }>, { name: boolean; date: string }>>,
 ]
-*/  
-export type MapTypes<T extends Record<PropertyKey, any>, R extends Record<'mapFrom' | 'mapTo', any>> = {
-  [K in keyof T]: T[K] extends R['mapFrom']
-    ? R extends {mapFrom: T[K]}
-      ? R['mapTo']
+*/
+export type MapTypes<
+  T extends Record<PropertyKey, any>,
+  R extends Record<"mapFrom" | "mapTo", any>
+> = {
+  [K in keyof T]: T[K] extends R["mapFrom"]
+    ? R extends { mapFrom: T[K] }
+      ? R["mapTo"]
       : never
-    : T[K]
+    : T[K];
 };
-  
+
 /*
 Example
 interface Todo1 {
@@ -556,8 +587,8 @@ type errors = [
 ]
 */
 export type Mutable<T extends object> = {
-  -readonly [K in keyof T]: T[K]
-}
+  -readonly [K in keyof T]: T[K];
+};
 
 /*
 Example
@@ -569,8 +600,10 @@ type cases = [
 ]
 */
 export type MutableKeys<T> = keyof {
-  [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true ? never: Key]: T[Key]
-}
+  [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true
+    ? never
+    : Key]: T[Key];
+};
 
 /*
 Example
@@ -590,7 +623,9 @@ type cases = [
 ]
 */
 export type ObjectEntries<T extends object> = {
-  [Key in keyof T]-?: Key extends keyof T ? [Key, T[Key] extends undefined ? undefined: Required<T>[Key]]: never
+  [Key in keyof T]-?: Key extends keyof T
+    ? [Key, T[Key] extends undefined ? undefined : Required<T>[Key]]
+    : never;
 }[keyof T];
 
 /*
@@ -608,8 +643,12 @@ type cases = [
 ]
 */
 export type ObjectFromEntries<T extends any[]> = {
-  [Key in T as Key extends any[] ? Key[0] extends string ? Key[0]: never: never]: Key[1]
-}
+  [Key in T as Key extends any[]
+    ? Key[0] extends string
+      ? Key[0]
+      : never
+    : never]: Key[1];
+};
 
 /*
 Example
@@ -621,7 +660,7 @@ type cases = [
 ]
 */
 export type OptionalKeys<T extends Record<PropertyKey, any>> = keyof {
-  [Key in keyof T as T[Key] extends Required<T>[Key] ? never: Key]: any
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? never : Key]: any;
 };
 
 /*
@@ -634,9 +673,8 @@ type cases = [
 ]
 */
 export type RequiredKeys<T extends Record<PropertyKey, any>> = keyof {
-  [Key in keyof T as T[Key] extends Required<T>[Key] ? Key: never]: any
-
-}
+  [Key in keyof T as T[Key] extends Required<T>[Key] ? Key : never]: any;
+};
 /*
 Example:
 type cases = [
@@ -645,7 +683,12 @@ type cases = [
   Expect<Equal<IsRequiredKey<{ a: number; b?: string }, 'b' | 'a'>, false>>,
 ]
 */
-export type IsRequiredKey<T, K extends keyof T> = Equal<K,RequiredKeys<T>> extends true ? true : false;
+export type IsRequiredKey<T, K extends keyof T> = Equal<
+  K,
+  RequiredKeys<T>
+> extends true
+  ? true
+  : false;
 
 /*
 Example
@@ -667,8 +710,10 @@ interface Todo2 {
 }
 */
 export type ReadonlyKeys<T> = keyof {
-  [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true ? Key: never]: T[Key]
-}
+  [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true
+    ? Key
+    : never]: T[Key];
+};
 
 /*
 Example
@@ -688,13 +733,17 @@ declare function getProp<T, P extends PathKeys<T>>(
 
 const make = getProp(obj, 'cars.0.make') // const make: "Ford"
 */
-export type PathKeys<T> = T extends readonly any[]
+export type PathKeys<T> = object extends T
+  ? string
+  : T extends readonly any[]
   ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>>
   : T extends object
   ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>>
   : never;
 
-export type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+export type SubKeys<T, K extends string> = K extends keyof T
+  ? `${K}.${PathKeys<T[K]>}`
+  : never;
 
 export type PropType<T, Path extends string> = Path extends keyof T
   ? T[Path]
@@ -703,3 +752,8 @@ export type PropType<T, Path extends string> = Path extends keyof T
     ? PropType<T[K], RT>
     : unknown
   : unknown;
+
+export declare function getProp<T, P extends PathKeys<T>>(
+  obj: T,
+  path: P
+): PropType<T, P>;
