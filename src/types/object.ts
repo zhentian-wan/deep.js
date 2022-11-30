@@ -561,6 +561,19 @@ export type Mutable<T extends object> = {
 
 /*
 Example
+type cases = [
+  Expect<Equal<MutableKeys<{ a: number; readonly b: string }>, 'a'>>,
+  Expect<Equal<MutableKeys<{ a: undefined; readonly b: undefined }>, 'a'>>,
+  Expect<Equal<MutableKeys<{ a: undefined; readonly b?: undefined; c: string; d: null }>, 'a' | 'c' | 'd'>>,
+  Expect<Equal<MutableKeys<{}>, never>>,
+]
+*/
+export type MutableKeys<T> = keyof {
+  [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true ? never: Key]: T[Key]
+}
+
+/*
+Example
 interface Model {
   name: string
   age: number
