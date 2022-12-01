@@ -179,6 +179,25 @@ export type ToPrimitive<T extends Record<PropertyKey, any>> = {
     : ValueToPrimitive<T[Key]>;
 };
 
+/**
+ * Example
+ * type cases = [
+ * Expect<Equal<Intersection<[[1, 2], [2, 3], [2, 2]]>, 2>>,
+ * Expect<Equal<Intersection<[[1, 2, 3], [2, 3, 4], [2, 2, 3]]>, 2 | 3>>,
+ * Expect<Equal<Intersection<[[1, 2], [3, 4], [5, 6]]>, never>>,
+ * Expect<Equal<Intersection<[[1, 2, 3], [2, 3, 4], 3]>, 3>>,
+ * Expect<Equal<Intersection<[[1, 2, 3], 2 | 3 | 4, 2 | 3]>, 2 | 3>>,
+ * Expect<Equal<Intersection<[[1, 2, 3], 2, 3]>, never>>,
+ *] 
+ *
+ *
+ * @public
+ */
+export type ToUnion<T> = T extends any[] ? T[number] : T
+export type Intersection<T> = T extends [infer F, ...infer RT]
+  ? ToUnion<F> & Intersection<RT>
+  : unknown
+
 /*
 Example
 type cases = [
