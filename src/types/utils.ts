@@ -182,6 +182,25 @@ export type ToPrimitive<T extends Record<PropertyKey, any>> = {
 /**
  * Example
  * type cases = [
+ * Expect<Equal<BinaryToDecimal<'10'>, 2>>,
+ * Expect<Equal<BinaryToDecimal<'0011'>, 3>>,
+ * Expect<Equal<BinaryToDecimal<'00000000'>, 0>>,
+ * Expect<Equal<BinaryToDecimal<'11111111'>, 255>>,
+ * Expect<Equal<BinaryToDecimal<'10101010'>, 170>>,
+ * ]
+ * @public
+ */
+type NumberToArray<T extends number, R extends 1[] = []> = R['length'] extends T ? R : NumberToArray<T, [...R, 1]>;
+
+type GetTwice<T extends unknown[]> = [...T, ...T];
+
+export type BinaryToDecimal<S extends string, Result extends unknown[] = []> = S extends `${infer First extends number}${infer RT}`
+  ? BinaryToDecimal<RT, [...GetTwice<Result>, ...NumberToArray<First>]>
+  : Result['length'];
+
+/**
+ * Example
+ * type cases = [
  * Expect<Equal<Intersection<[[1, 2], [2, 3], [2, 2]]>, 2>>,
  * Expect<Equal<Intersection<[[1, 2, 3], [2, 3, 4], [2, 2, 3]]>, 2 | 3>>,
  * Expect<Equal<Intersection<[[1, 2], [3, 4], [5, 6]]>, never>>,
