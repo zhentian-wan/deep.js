@@ -1,4 +1,4 @@
-import type { Equal } from "./utils";
+import type { Equal, NumberToArray } from "./utils";
 import type { Split } from "./string";
 import type { Reverse, Join } from "./array";
 /*
@@ -111,3 +111,32 @@ export type IsPalindrome<T extends string | number> = Equal<
   `${T}`,
   Join<Reverse<Split<`${T}`, "">>, "">
 >;
+
+/**
+ * Example
+ * type cases = [
+  Expect<Equal<TwoSum<[3, 3], 6>, true>>,
+  Expect<Equal<TwoSum<[3, 2, 4], 6>, true>>,
+  Expect<Equal<TwoSum<[2, 7, 11, 15], 15>, false>>,
+  Expect<Equal<TwoSum<[2, 7, 11, 15], 9>, true>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 0>, false>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 1>, false>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 2>, false>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 3>, true>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 4>, true>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 5>, true>>,
+  Expect<Equal<TwoSum<[1, 2, 3], 6>, false>>,
+]
+ */
+
+type RecursiveAdd<Current extends number, T extends number[], Target extends number> = T extends [infer F, ...infer RT extends number[]]
+  ? [...NumberToArray<F>, ...NumberToArray<Current>]['length'] extends Target
+    ? true
+    : RecursiveAdd<Current, RT, Target>
+  : false;
+
+export type TwoSum<T extends number[], U extends number> = T extends [infer F extends number, ...infer RT extends number[]]
+  ? RecursiveAdd<F, RT, U> extends false
+    ? TwoSum<RT, U>
+    : true
+  : false;
