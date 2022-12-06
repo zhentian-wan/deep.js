@@ -200,6 +200,31 @@ export type PropPath<T, U> = U extends keyof T
   : never;
 export type DeepPick<T, U> = UnionToIntersection<PropPath<T, U>>;
 
+/**
+ * Example
+ * type foo = {
+  foo: string
+  bars: [{ foo: string }]
+}
+
+type Foo = {
+  Foo: string
+  Bars: [{
+    Foo: string
+  }]
+}
+type cases = [
+  Expect<Equal<Foo, CapitalizeNestObjectKeys<foo>>>,
+]
+ */
+ export type CapitalizeNestObjectKeys<T> = T extends any[]
+  ? T extends [infer F, ...infer R]
+    ? [CapitalizeNestObjectKeys<F>, ...CapitalizeNestObjectKeys<R>]
+    : []
+  : T extends object
+    ? { [K in keyof T as K extends string ? Capitalize<K> : never]: CapitalizeNestObjectKeys<T[K]> }
+    : T;
+
 /*
 Example
 type cases = [
