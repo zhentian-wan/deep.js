@@ -140,3 +140,19 @@ export type TwoSum<T extends number[], U extends number> = T extends [infer F ex
     ? TwoSum<RT, U>
     : true
   : false;
+
+/**
+ * Example
+ * type cases = [
+  // string -> null
+  Expect<Equal<UnionReplace<number | string, [[string, null]]>, number | null>>,
+
+  // Date -> string; Function -> undefined
+  Expect<Equal<UnionReplace<Function | Date | object, [[Date, string], [Function, undefined]]>, undefined | string | object>>,
+]
+ */
+export type UnionReplace<T, U extends [any, any][]> = U extends [infer F, ...infer RT extends [any, any][]]
+? F extends [infer ToBeReplaced, infer Replacer]
+  ? UnionReplace<Exclude<T, ToBeReplaced> | Replacer, RT>
+  : UnionReplace<T, RT>
+: T
