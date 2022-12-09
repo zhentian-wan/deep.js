@@ -298,6 +298,8 @@ type cases = [
 */
 export type IsNever<T> = [T] extends [never] ? true : false;
 
+export type isNegative<T extends number> = NumberToString<T> extends `-${number}` ? true: false;
+
 /*
 Example
 type cases = [
