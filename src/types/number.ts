@@ -28,6 +28,14 @@ type cases = [
 ]
 */
 export type MinusOne<T extends number, ARR extends unknown[] = []> = any extends never ? never: [...ARR, 1]['length'] extends T ? ARR['length'] : MinusOne<T, [...ARR, 1]>;
+/**
+ * Example
+ * Only when T > N
+ * and T & N are both positive value
+ */
+export type MinusN<T extends number, N extends number, NACC extends unknown[] = []> = [...NACC]['length'] extends N 
+    ? T
+    : MinusN<MinusOne<T>, N, [...NACC, unknown]>;
 export type PlusOne<T extends number, C extends unknown[] = []> = C['length'] extends T
   ? [...C, unknown]['length']
   : PlusOne<T, [...C, unknown]>;
