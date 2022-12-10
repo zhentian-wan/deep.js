@@ -1,6 +1,10 @@
 # deep.js
 A light weight Javascript/Typescript library for nested object operations
 
+## Types
+
+[Docs](https://zhentian-wan.github.io/deep.js/deep.js.types.html)
+
 ## Typescript library setup
 
 1. run `npx gitignore node` to create `.gitignore`
