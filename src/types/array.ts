@@ -4,6 +4,26 @@ import type { Equal, FalsyValues } from "./utils";
 /*
 Example
 type cases = [
+  Expect<Equal<All<[1, 1, 1], 1>, true>>,
+  Expect<Equal<All<[1, 1, 2], 1>, false>>,
+  Expect<Equal<All<["1", "1", "1"], "1">, true>>,
+  Expect<Equal<All<["1", "1", "1"], 1>, false>>,
+  Expect<Equal<All<[number, number, number], number>, true>>,
+  Expect<Equal<All<[number, number, string], number>, false>>,
+  Expect<Equal<All<[null, null, null], null>, true>>,
+  Expect<Equal<All<[[1], [1], [1]], [1]>, true>>,
+  Expect<Equal<All<[{}, {}, {}], {}>, true>>,
+];
+*/
+export type All<T extends any[], U extends any = T[0]> = T extends [infer H, ...infer RT]
+  ? Equal<H, U> extends true 
+    ? All<RT, U>
+    : false
+  : true;
+
+/*
+Example
+type cases = [
   Expect<Equal<AnyOf<[1, 'test', true, [1], { name: 'test' }, { 1: 'test' }]>, true>>,
   Expect<Equal<AnyOf<[1, '', false, [], {}]>, true>>,
   Expect<Equal<AnyOf<[0, 'test', false, [], {}]>, true>>,
