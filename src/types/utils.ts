@@ -252,7 +252,19 @@ export type PathParams<S extends string> =
     : S extends `${string}/:${infer Param}`
     ? Param
     : never;
-
+                               
+/*
+Example
+type tests = [
+  Expect<Equal<Identity<1>, 1>>,
+  Expect<Equal<Identity<"1">, "1">>,
+  Expect<Equal<Identity<true>, true>>,
+  Expect<Equal<Identity<false>, false>>,
+  Expect<Equal<Identity<null>, null>>
+];
+*/
+export type Identity<T> = T;
+                               
 /*
 Example
 type cases = [
