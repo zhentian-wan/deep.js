@@ -341,6 +341,17 @@ export type Nullable<T extends Record<PropertyKey, unknown>> = {
 
 /*
 Example
+type tests = [
+  Expect<Equal<Maybe<string>, string | null | undefined>>,
+  Expect<Equal<Maybe<number>, number | null | undefined>>,
+  Expect<Equal<Maybe<boolean>, boolean | null | undefined>>,
+  Expect<Equal<Maybe<null>, null | undefined>>
+];
+*/
+export type Maybe<T> = T | null | undefined;
+
+/*
+Example
 type t = XOR<true, false> // true
 type t1 = XOR<true, true> // false
 */
