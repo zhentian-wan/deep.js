@@ -186,6 +186,22 @@ export type Fill<
 
 /*
 Example
+type Falsy = false | 0 | '' | null | undefined
+
+type cases = [
+  Expect<Equal<Filter<[0, 1, 2], 2>, [2]>>,
+  Expect<Equal<Filter<[0, 1, 2], 0 | 1>, [0, 1]>>,
+  Expect<Equal<Filter<[0, 1, 2], Falsy>, [0]>>
+]
+*/
+export type Filter<T extends any[], U, ACC extends any[] = []> = T extends [infer F, ...infer RT]
+  ? F extends U
+    ? Filter<RT, U, [...ACC, F]>
+    : Filter<RT, U, ACC>
+  : ACC;
+
+/*
+Example
 type cases = [
   Expect<Equal<FilterOut<[], never>, []>>,
   Expect<Equal<FilterOut<[never], never>, []>>,
