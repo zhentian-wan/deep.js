@@ -351,6 +351,19 @@ export type Join<
     : Join<RT, U, `${ACC}${A}${U}`>
   : ACC;
 
+
+/*
+Example: NonEmptyArray
+export const makeEnum = (values: NonEmptyArray<string>) => {};
+
+makeEnum(["a"]);
+makeEnum(["a", "b", "c"]);
+
+// @ts-expect-error
+makeEnum([]);
+*/
+export type NonEmptyArray<T> = [T, ...Array<T>];
+
 /*
 Example
 type cases = [
