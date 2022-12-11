@@ -348,7 +348,7 @@ type tests = [
   Expect<Equal<Maybe<null>, null | undefined>>
 ];
 */
-export type Maybe<T> = T | null | undefined;
+export type Maybe<T extends {}> = T | null | undefined;
 
 /*
 Example
