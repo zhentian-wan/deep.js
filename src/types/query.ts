@@ -1,3 +1,5 @@
+import type { MergeObject } from "./object";
+
 /**
  * Example
  type cases = [
@@ -34,3 +36,42 @@ type Grouping<U, ACC extends Record<PropertyKey, unknown>= {}> = U extends objec
     : ACC
   :ACC
 export type ParseQueryString<T extends string> = T extends '' ? {}: Grouping<MapToKeyValPair<SplitQuery<T>>>
+
+/*
+Example
+type cases = [
+  Expect<Equal<PathParams<"/profile">, never>>,
+  Expect<Equal<PathParams<"/profile/:userId">, "userId">>,
+  Expect<
+    Equal<PathParams<"/profile/:userId/posts/:postId">, "userId" | "postId">
+  >,
+] 
+*/
+export type PathParams<S extends string> =
+  S extends `/${string}/:${infer Param}/${infer REST}`
+    ? Param | PathParams<`/${REST}`>
+    : S extends `${string}/:${infer Param}`
+    ? Param
+    : never;
+
+/*
+Example
+type UserPath = "/users/:id";
+type UserOrganisationPath = "/users/:id/organisations/:organisationId";
+type tests = [
+  Expect<Equal<PathParamsObj<UserPath>, { id: string }>>,
+  Expect<
+    Equal<
+      PathParamsObj<UserOrganisationPath>,
+      { id: string; organisationId: string }
+    >
+  >
+];
+*/
+export type PathParamsObj<S extends string> =
+  S extends `/${string}/:${infer Param}/${infer REST}`
+    ? MergeObject<{ [Key in Param]: string } & PathParamsObj<`/${REST}`>>
+    : S extends `${string}/:${infer Param}`
+    ? { [Key in Param]: string }
+    : never;
+             

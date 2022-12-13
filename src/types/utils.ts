@@ -237,24 +237,7 @@ Example
 ExtractValuesOfTuple<['a', 'b']>, 'a' | 'b'>
 */
 export type ExtractValuesOfTuple<T extends any[]> = T[keyof T & number];
-
-/*
-Example
-type cases = [
-  Expect<Equal<PathParams<"/profile">, never>>,
-  Expect<Equal<PathParams<"/profile/:userId">, "userId">>,
-  Expect<
-    Equal<PathParams<"/profile/:userId/posts/:postId">, "userId" | "postId">
-  >,
-] 
-*/
-export type PathParams<S extends string> =
-  S extends `/${string}/:${infer Param}/${infer REST}`
-    ? Param | PathParams<`/${REST}`>
-    : S extends `${string}/:${infer Param}`
-    ? Param
-    : never;
-                               
+                  
 /*
 Example
 type tests = [
