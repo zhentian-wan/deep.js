@@ -48,6 +48,49 @@ export type Camelize<T> = T extends any[]
     };
 
 /*
+Example: DiscrimatedUnionToObject
+type Route =
+  | {
+      route: "/";
+      search: {
+        page: string;
+        perPage: string;
+      };
+    }
+  | { route: "/about" }
+  | { route: "/admin" }
+  | { route: "/admin/users" };
+type tests = [
+  Expect<
+    Equal<
+      DiscrimatedUnionToObject<Route, "route">,
+      {
+        "/": {
+          search: {
+            page: string;
+            perPage: string;
+          };
+        };
+        "/about": unknown;
+        "/admin": unknown;
+        "/admin/users": unknown;
+      }
+    >
+  >
+];
+*/
+export type DiscrimatedUnionToObject<
+  T extends Record<PropertyKey, any>,
+  U extends keyof T
+> = {
+  [P in T as P[U]]: [Exclude<keyof P, U>] extends [never]
+    ? unknown
+    : {
+        [Key in Exclude<keyof P, U>]: P[Key];
+      };
+};
+
+/*
 Example
 type cases = [
   Expect<Equal<KebabCase<'FooBarBaz'>, 'foo-bar-baz'>>,
