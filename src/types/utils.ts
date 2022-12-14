@@ -283,11 +283,6 @@ export type IsTuple<T> = [T] extends [never]
 
 /*
 Example
-interface Attributes {
-  id: string;
-  email: string;
-  username: string;
-}
 type cases = [
   Expect<Equal<IsNever<never>, true>>,
   Expect<Equal<IsNever<never | string>, false>>,
@@ -298,16 +293,17 @@ type cases = [
   Expect<Equal<IsNever<{}>, false>>,
 ]
 */
-export type ObjectToUnion<T> = {
-  [Key in keyof T]: Record<Key, T[Key]>;
-}[keyof T];
-
 export type IsNever<T> = [T] extends [never] ? true : false;
 
 export type isNegative<T extends number> = NumberToString<T> extends `-${number}` ? true: false;
 
 /*
 Example: ObjectToUnion
+interface Attributes {
+  id: string;
+  email: string;
+  username: string;
+}
 type tests = [
   Expect<
     Equal<
@@ -325,6 +321,9 @@ type tests = [
   >
 ];
 */
+export type ObjectToUnion<T> = {
+  [Key in keyof T]: Record<Key, T[Key]>;
+}[keyof T];
 
 /*
 Example
