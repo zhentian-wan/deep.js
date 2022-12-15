@@ -251,6 +251,21 @@ export type Split<S extends string, SEP extends string> = Equal<
   : [S];
 
 /*
+Example SnakeCase
+type cases = [
+  Expect<Equal<SnakeCase<'hello'>, 'hello'>>,
+  Expect<Equal<SnakeCase<'userName'>, 'user_name'>>,
+  Expect<Equal<SnakeCase<'getElementById'>, 'get_element_by_id'>>,
+  Expect<Equal<SnakeCase<'getElementById' | 'getElementByClassNames'>, 'get_element_by_id' | 'get_element_by_class_names'>>,
+]
+*/
+export type SnakeCase<T, ACC extends string = ''> = T extends `${infer F}${infer REST}`
+  ? Uppercase<F> extends F
+    ? SnakeCase<REST, `${ACC}_${Lowercase<F>}`>
+    : SnakeCase<REST,`${ACC}${F}`>
+  : ACC;
+
+/*
 Example
 type cases = [
   Expect<Equal<TrimRight<'str'>, 'str'>>,
