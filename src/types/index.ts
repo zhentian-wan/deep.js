@@ -7,6 +7,8 @@ export * from "./misc";
 export * from "./number";
 export * from "./object";
 export * from "./promise";
+export * from "./query";
+export * from "./slice";
 export * from "./string";
 export * from "./union";
 export * from "./utils";

@@ -1,6 +1,6 @@
 import type { CamelizeWord } from "./string";
 
-export export type Expect<T extends true> = T;
+export type Expect<T extends true> = T;
 
 export type FalsyValues =
   | ""
@@ -235,13 +235,19 @@ export type ToPrimitive<T extends Record<PropertyKey, any>> = {
  * ]
  * @public
  */
-type NumberToArray<T extends number, R extends 1[] = []> = R['length'] extends T ? R : NumberToArray<T, [...R, 1]>;
+export type NumberToArray<
+  T extends number,
+  R extends 1[] = []
+> = R["length"] extends T ? R : NumberToArray<T, [...R, 1]>;
 
 type GetTwice<T extends unknown[]> = [...T, ...T];
 
-export type BinaryToDecimal<S extends string, Result extends unknown[] = []> = S extends `${infer First extends number}${infer RT}`
+export type BinaryToDecimal<
+  S extends string,
+  Result extends unknown[] = []
+> = S extends `${infer First extends number}${infer RT}`
   ? BinaryToDecimal<RT, [...GetTwice<Result>, ...NumberToArray<First>]>
-  : Result['length'];
+  : Result["length"];
 
 /**
  * Example
@@ -252,15 +258,15 @@ export type BinaryToDecimal<S extends string, Result extends unknown[] = []> = S
  * Expect<Equal<Intersection<[[1, 2, 3], [2, 3, 4], 3]>, 3>>,
  * Expect<Equal<Intersection<[[1, 2, 3], 2 | 3 | 4, 2 | 3]>, 2 | 3>>,
  * Expect<Equal<Intersection<[[1, 2, 3], 2, 3]>, never>>,
- *] 
+ *]
  *
  *
  * @public
  */
-export type ToUnion<T> = T extends any[] ? T[number] : T
+export type ToUnion<T> = T extends any[] ? T[number] : T;
 export type Intersection<T> = T extends [infer F, ...infer RT]
   ? ToUnion<F> & Intersection<RT>
-  : unknown
+  : unknown;
 
 /*
 Example
@@ -280,7 +286,7 @@ Example
 ExtractValuesOfTuple<['a', 'b']>, 'a' | 'b'>
 */
 export type ExtractValuesOfTuple<T extends any[]> = T[keyof T & number];
-                  
+
 /*
 Example
 type tests = [
@@ -292,7 +298,7 @@ type tests = [
 ];
 */
 export type Identity<T> = T;
-                               
+
 /*
 Example
 type cases = [
@@ -337,11 +343,11 @@ type cases1 = [
   Expect<Equal<IsInteger<typeof y>, 1>>,
 ]
 */
-export type IsInteger<T> = `${T & number}` extends `${number}.${number}` 
+export type IsInteger<T> = `${T & number}` extends `${number}.${number}`
   ? never
   : number extends T
-    ? never
-    : T;
+  ? never
+  : T;
 
 /*
 Example
@@ -356,13 +362,13 @@ type cases = [
 ]
 */
 export type IsNever<T> = [T] extends [never] ? true : false;
-export type Expect<T extends true> = T;
 export type ExpectTrue<T extends true> = T;
 export type ExpectFalse<T extends false> = T;
 export type IsTrue<T extends true> = T;
 export type IsFalse<T extends false> = T;
-export type isNegative<T extends number> = NumberToString<T> extends `-${number}` ? true: false;
-
+export type isNegative<T extends number> =
+  NumberToString<T> extends `-${number}` ? true : false;
+export type NumberToString<T extends number> = `${T}`;
 /*
 Example: ObjectToUnion
 interface Attributes {
@@ -429,7 +435,10 @@ type tests = [
   Expect<Equal<Maybe<null>, null | undefined>>
 ];
 */
-export type Maybe<T extends {}> = T | null | undefined;
+export type Maybe<T extends Record<PropertyKey, unknown>> =
+  | T
+  | null
+  | undefined;
 
 /*
 Example

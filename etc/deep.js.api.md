@@ -8,6 +8,9 @@
 type Absolute<T extends number | string | bigint> = `${T}` extends `-${infer S}` ? S : `${T}`;
 
 // @public (undocumented)
+type All<T extends any[], U extends any = T[0]> = T extends [infer H, ...infer RT] ? Equal<H, U> extends true ? All<RT, U> : false : true;
+
+// @public (undocumented)
 type AnyOf<T extends readonly any[]> = T extends [infer F, ...infer RT] ? F extends FalsyValues ? AnyOf<RT> : true : false;
 
 // @public (undocumented)
@@ -19,10 +22,22 @@ type AppendToObject<T extends Record<PropertyKey, any>, U extends string | numbe
 }>;
 
 // @public
+type Assign<T extends Record<string, unknown>, U> = U extends object[] ? U extends [infer F, ...infer RT] ? Assign<MergeObject<({
+    [Key in keyof T as Key extends keyof F ? never : Key]: T[Key];
+} & {
+    [Key in keyof F]: F[Key];
+})>, RT> : T : T;
+
+// @public
 export function avg(a: number, b: number, c: number): number;
 
 // @public (undocumented)
 type BEM<B extends string, E extends string[], M extends string[]> = M["length"] extends 0 ? `${B}__${E[number]}` : E["length"] extends 0 ? `${B}--${M[number]}` : `${B}__${E[number]}--${M[number]}`;
+
+// Warning: (ae-forgotten-export) The symbol "GetTwice" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type BinaryToDecimal<S extends string, Result extends unknown[] = []> = S extends `${infer First extends number}${infer RT}` ? BinaryToDecimal<RT, [...GetTwice<Result>, ...NumberToArray<First>]> : Result["length"];
 
 // Warning: (ae-forgotten-export) The symbol "ToCamelCase" needs to be exported by the entry point index.d.ts
 //
@@ -36,6 +51,11 @@ type Camelize<T> = T extends any[] ? T extends [infer F, ...infer RT] ? [Cameliz
 
 // @public (undocumented)
 type CamelizeWord<S> = S extends `${infer F}_${infer RT}` ? `${F}${CamelizeWord<Capitalize<RT>>}` : S;
+
+// @public
+type CapitalizeNestObjectKeys<T> = T extends any[] ? T extends [infer F, ...infer R] ? [CapitalizeNestObjectKeys<F>, ...CapitalizeNestObjectKeys<R>] : [] : T extends object ? {
+    [K in keyof T as K extends string ? Capitalize<K> : never]: CapitalizeNestObjectKeys<T[K]>;
+} : T;
 
 // @public (undocumented)
 type CapitalizeWords<S extends string, Prev extends string = "", ACC extends string = ""> = S extends `${infer First}${infer REST}` ? Uppercase<Prev> extends UpperLetterUnion ? CapitalizeWords<REST, First, `${ACC}${First}`> : CapitalizeWords<REST, First, `${ACC}${Uppercase<First>}`> : ACC;
@@ -97,6 +117,13 @@ type Diff<T, S> = {
 };
 
 // @public (undocumented)
+type DiscrimatedUnionToObject<T extends Record<PropertyKey, any>, U extends keyof T> = {
+    [P in T as P[U]]: [Exclude<keyof P, U>] extends [never] ? unknown : {
+        [Key in Exclude<keyof P, U>]: P[Key];
+    };
+};
+
+// @public (undocumented)
 type DropString<S, R extends string> = R extends "" ? S : S extends `${infer F}${infer RT}` ? F extends StringToUnion<R> ? DropString<RT, R> : `${F}${DropString<RT, R>}` : S;
 
 // @public (undocumented)
@@ -111,6 +138,15 @@ type Enum<T extends readonly string[], N extends boolean = false> = {
 type Equal<T, U> = (<P>(x: P) => P extends T ? 1 : 2) extends <P>(x: P) => P extends U ? 1 : 2 ? true : false;
 
 // @public (undocumented)
+type Expect<T extends true> = T;
+
+// @public (undocumented)
+type ExpectFalse<T extends false> = T;
+
+// @public (undocumented)
+type ExpectTrue<T extends true> = T;
+
+// @public (undocumented)
 type ExtractValuesOfTuple<T extends any[]> = T[keyof T & number];
 
 // @public (undocumented)
@@ -121,6 +157,9 @@ type Fibonacci<T extends number, C extends unknown[] = [], U1 extends unknown[] 
 
 // @public (undocumented)
 type Fill<T extends unknown[], N, Start extends number = 0, End extends number = T["length"], P extends number = 0> = Start extends End ? T : T extends [infer F, ...infer RT] ? P extends Start ? [N, ...Fill<RT, N, PlusOne<Start>, End, PlusOne<P>>] : [F, ...Fill<RT, N, Start, End, PlusOne<P>>] : [];
+
+// @public (undocumented)
+type Filter<T extends any[], U, ACC extends any[] = []> = T extends [infer F, ...infer RT] ? F extends U ? Filter<RT, U, [...ACC, F]> : Filter<RT, U, ACC> : ACC;
 
 // @public (undocumented)
 type FilterOut<T extends any[], U, ACC extends any[] = []> = T extends [
@@ -136,6 +175,9 @@ type First<T extends any[]> = T extends [infer First, ...infer _] ? First : neve
 
 // @public (undocumented)
 type Flatten<T> = T extends [] ? [] : T extends [infer H, ...infer T] ? [...Flatten<H>, ...Flatten<T>] : [T];
+
+// @public (undocumented)
+type GenNode<K extends string | number, IsRoot extends boolean> = IsRoot extends true ? `${K}` : `.${K}` | (K extends number ? `[${K}]` | `.[${K}]` : never);
 
 // @public (undocumented)
 type Get<T extends Record<PropertyKey, any>, K extends string> = K extends keyof T ? T[K] : K extends `${infer P}.${infer U}` ? Get<T[P], U> : never;
@@ -166,6 +208,9 @@ type GreaterThan<T extends number, U extends number, ACC extends unknown[] = []>
 type Head<T extends any[]> = T extends [infer HEAD, ...infer _] ? HEAD : never;
 
 // @public (undocumented)
+type Identity<T> = T;
+
+// @public (undocumented)
 type If<C extends boolean, T, F> = C extends true ? T : F;
 
 // @public (undocumented)
@@ -183,10 +228,19 @@ type IndexOf<T extends any[], U, ACC extends unknown[] = []> = T extends [infer 
 type InorderTraversal<T extends TreeNode | null> = [T] extends [TreeNode] ? [...InorderTraversal<T["left"]>, T["val"], ...InorderTraversal<T["right"]>] : [];
 
 // @public (undocumented)
+type Intersection<T> = T extends [infer F, ...infer RT] ? ToUnion<F> & Intersection<RT> : unknown;
+
+// @public (undocumented)
 type IsAny<T> = Equal<any, T>;
 
 // @public (undocumented)
+type IsFalse<T extends false> = T;
+
+// @public (undocumented)
 type IsInteger<T> = `${T & number}` extends `${number}.${number}` ? never : number extends T ? never : T;
+
+// @public (undocumented)
+type isNegative<T extends number> = NumberToString<T> extends `-${number}` ? true : false;
 
 // @public (undocumented)
 type IsNever<T> = [T] extends [never] ? true : false;
@@ -196,6 +250,9 @@ type IsPalindrome<T extends string | number> = Equal<`${T}`, Join<Reverse<Split<
 
 // @public (undocumented)
 type IsRequiredKey<T, K extends keyof T> = Equal<K, RequiredKeys<T>> extends true ? true : false;
+
+// @public (undocumented)
+type IsTrue<T extends true> = T;
 
 // @public (undocumented)
 type IsTuple<T> = [T] extends [never] ? false : T extends readonly any[] ? any[] extends T ? false : true : false;
@@ -255,6 +312,9 @@ type MapTypes<T extends Record<PropertyKey, any>, R extends Record<"mapFrom" | "
 };
 
 // @public (undocumented)
+type Maybe<T extends Record<PropertyKey, unknown>> = T | null | undefined;
+
+// @public (undocumented)
 type Merge<F extends Record<PropertyKey, any>, S extends Record<PropertyKey, any>> = {
     [Key in keyof (F & S)]: Key extends keyof S ? S[Key] : Key extends keyof F ? F[Key] : never;
 };
@@ -263,6 +323,9 @@ type Merge<F extends Record<PropertyKey, any>, S extends Record<PropertyKey, any
 type MergeObject<T> = {
     [P in keyof T]: T[P];
 };
+
+// @public
+type MinusN<T extends number, N extends number, NACC extends unknown[] = []> = [...NACC]['length'] extends N ? T : MinusN<MinusOne<T>, N, [...NACC, unknown]>;
 
 // @public (undocumented)
 type MinusOne<T extends number, ARR extends unknown[] = []> = any extends never ? never : [...ARR, 1]['length'] extends T ? ARR['length'] : MinusOne<T, [...ARR, 1]>;
@@ -278,12 +341,27 @@ type MutableKeys<T> = keyof {
 };
 
 // @public (undocumented)
+type NonEmptyArray<T> = [T, ...Array<T>];
+
+// @public (undocumented)
+type NotAny<T> = true extends IsAny<T> ? false : true;
+
+// @public (undocumented)
+type NotEqual<X, Y> = true extends Equal<X, Y> ? false : true;
+
+// @public (undocumented)
 type Nullable<T extends Record<PropertyKey, unknown>> = {
     [K in keyof T]: T[K] | null;
 };
 
 // @public (undocumented)
 type NumberRange<L extends number | C['length'], H extends number, ACC = never, C extends unknown[] = []> = C['length'] extends H ? ACC | H : C['length'] extends L ? NumberRange<[...C, unknown]['length'], H, L | ACC, [...C, unknown]> : NumberRange<L, H, ACC, [...C, unknown]>;
+
+// @public
+type NumberToArray<T extends number, R extends 1[] = []> = R["length"] extends T ? R : NumberToArray<T, [...R, 1]>;
+
+// @public (undocumented)
+type NumberToString<T extends number> = `${T}`;
 
 // @public (undocumented)
 type ObjectEntries<T extends object> = {
@@ -294,6 +372,14 @@ type ObjectEntries<T extends object> = {
 type ObjectFromEntries<T extends any[]> = {
     [Key in T as Key extends any[] ? Key[0] extends string ? Key[0] : never : never]: Key[1];
 };
+
+// @public (undocumented)
+type ObjectKeyPaths<T extends object, IsRoot extends boolean = true, K extends keyof T = keyof T> = K extends string | number ? GenNode<K, IsRoot> | (T[K] extends object ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}` : never) : never;
+
+// @public (undocumented)
+type ObjectToUnion<T> = {
+    [Key in keyof T]: Record<Key, T[Key]>;
+}[keyof T];
 
 // @public (undocumented)
 type OmitByType<T extends object, U> = {
@@ -310,6 +396,13 @@ type OptionalKeys<T extends Record<PropertyKey, any>> = keyof {
     [Key in keyof T as T[Key] extends Required<T>[Key] ? never : Key]: any;
 };
 
+// Warning: (ae-forgotten-export) The symbol "Grouping" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "MapToKeyValPair" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SplitQuery" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type ParseQueryString<T extends string> = T extends "" ? Record<PropertyKey, unknown> : Grouping<MapToKeyValPair<SplitQuery<T>>>;
+
 // @public (undocumented)
 type PartialByKeys<T, K extends keyof T = keyof T> = MergeObject<Omit<T, K> & {
     [P in keyof T as P extends K ? P : never]?: T[P];
@@ -320,6 +413,13 @@ type PathKeys<T> = object extends T ? string : T extends readonly any[] ? Extrac
 
 // @public (undocumented)
 type PathParams<S extends string> = S extends `/${string}/:${infer Param}/${infer REST}` ? Param | PathParams<`/${REST}`> : S extends `${string}/:${infer Param}` ? Param : never;
+
+// @public (undocumented)
+type PathParamsObj<S extends string> = S extends `/${string}/:${infer Param}/${infer REST}` ? MergeObject<{
+    [Key in Param]: string;
+} & PathParamsObj<`/${REST}`>> : S extends `${string}/:${infer Param}` ? {
+    [Key in Param]: string;
+} : never;
 
 // @public (undocumented)
 type Permutation<T, U = T> = [T] extends [never] ? [] : U extends any ? [U, ...Permutation<Exclude<T, U>>] : [];
@@ -394,6 +494,15 @@ type Reverse<T> = T extends [...infer H, infer T] ? [T, ...Reverse<H>] : [];
 // @public (undocumented)
 type Shift<T extends any[]> = T extends [infer _, ...infer REST] ? REST : [];
 
+// Warning: (ae-forgotten-export) The symbol "SliceRightIgnoreSign" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "SliceLeftIgnoreSign" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type Slice<Arr extends readonly any[], Start extends number = 0, End extends number = Arr['length']> = `${Start}` extends `-${string}` ? SliceRightIgnoreSign<SliceLeftIgnoreSign<Arr, Start>, End> : SliceLeftIgnoreSign<SliceRightIgnoreSign<Arr, End>, Start>;
+
+// @public (undocumented)
+type SnakeCase<T, ACC extends string = ''> = T extends `${infer F}${infer REST}` ? Uppercase<F> extends F ? SnakeCase<REST, `${ACC}_${Lowercase<F>}`> : SnakeCase<REST, `${ACC}${F}`> : ACC;
+
 // @public (undocumented)
 type Space = " " | "\n" | "\t";
 
@@ -427,6 +536,9 @@ type ToPrimitive<T extends Record<PropertyKey, any>> = {
     [Key in keyof T]: T[Key] extends any[] ? ArrayToPrimitive<T[Key]> : T[Key] extends object ? ObjectToPrimitive<T[Key]> : ValueToPrimitive<T[Key]>;
 };
 
+// @public
+type ToUnion<T> = T extends any[] ? T[number] : T;
+
 // @public (undocumented)
 type Trim<S extends string> = S extends `${Space}${infer Word}` ? Trim<Word> : S extends `${infer Word}${Space}` ? Trim<Word> : S;
 
@@ -455,14 +567,24 @@ type TupleToObject<T extends ReadonlyArray<string | number>> = {
 // @public (undocumented)
 type TupleToUnion<T extends any[]> = T extends [infer F, ...infer RT] ? F | TupleToUnion<RT> : never;
 
+// Warning: (ae-forgotten-export) The symbol "RecursiveAdd" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type TwoSum<T extends number[], U extends number> = T extends [
+infer F extends number,
+...infer RT extends number[]
+] ? RecursiveAdd<F, RT, U> extends false ? TwoSum<RT, U> : true : false;
+
 declare namespace types {
     export {
+        All,
         AnyOf,
         ConstructTuple,
         Chunk,
         Enum,
         FindIndex,
         Fill,
+        Filter,
         FilterOut,
         Flatten,
         First,
@@ -472,6 +594,7 @@ declare namespace types {
         Head,
         Shift,
         Join,
+        NonEmptyArray,
         Includes,
         IndexOf,
         Push,
@@ -497,17 +620,21 @@ declare namespace types {
         Placeholder,
         OnPropChnagedMethods,
         IsPalindrome,
+        TwoSum,
+        UnionReplace,
         Absolute,
         MinusOne,
+        MinusN,
         PlusOne,
         GreaterThan,
-        IsInteger,
         NumberRange,
         Trunc,
         getProp,
+        Assign,
         AppendToObject,
         PropPath,
         DeepPick,
+        CapitalizeNestObjectKeys,
         DeepReadonly,
         DeepPartial,
         DeepMutable,
@@ -528,6 +655,8 @@ declare namespace types {
         MutableKeys,
         ObjectEntries,
         ObjectFromEntries,
+        GenNode,
+        ObjectKeyPaths,
         OptionalKeys,
         RequiredKeys,
         IsRequiredKey,
@@ -536,6 +665,10 @@ declare namespace types {
         SubKeys,
         PropType,
         PromiseAll,
+        ParseQueryString,
+        PathParams,
+        PathParamsObj,
+        Slice,
         CamelizeWord,
         ConcatString,
         DropString,
@@ -550,14 +683,17 @@ declare namespace types {
         TrimLeft,
         ReplaceAll,
         Split,
+        SnakeCase,
         TrimRight,
         UnionToIntersectionFn,
         GetLastUnion,
         UnionToTuple,
         TupleToUnion,
+        Expect,
         FalsyValues,
         Space,
         Camelize,
+        DiscrimatedUnionToObject,
         KebabCase,
         CamelCase,
         StringToUnion,
@@ -566,18 +702,39 @@ declare namespace types {
         Equal,
         BEM,
         ToPrimitive,
+        NumberToArray,
+        BinaryToDecimal,
+        ToUnion,
+        Intersection,
         UnionToIntersection,
         ExtractValuesOfTuple,
-        PathParams,
+        Identity,
         IsAny,
+        NotAny,
         IsTuple,
+        IsInteger,
         IsNever,
+        ExpectTrue,
+        ExpectFalse,
+        IsTrue,
+        IsFalse,
+        isNegative,
+        NumberToString,
+        ObjectToUnion,
         ToNumber,
         Nullable,
+        NotEqual,
+        Maybe,
         XOR
     }
 }
 export { types }
+
+// @public
+type UnionReplace<T, U extends [any, any][]> = U extends [
+infer F,
+...infer RT extends [any, any][]
+] ? F extends [infer ToBeReplaced, infer Replacer] ? UnionReplace<Exclude<T, ToBeReplaced> | Replacer, RT> : UnionReplace<T, RT> : T;
 
 // @public (undocumented)
 type UnionToIntersection<U> = (U extends any ? (x: U) => any : never) extends (x: infer R) => any ? R : never;

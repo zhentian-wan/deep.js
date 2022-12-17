@@ -129,13 +129,20 @@ export type IsPalindrome<T extends string | number> = Equal<
 ]
  */
 
-type RecursiveAdd<Current extends number, T extends number[], Target extends number> = T extends [infer F, ...infer RT extends number[]]
-  ? [...NumberToArray<F>, ...NumberToArray<Current>]['length'] extends Target
+type RecursiveAdd<
+  Current extends number,
+  T extends number[],
+  Target extends number
+> = T extends [infer F extends number, ...infer RT extends number[]]
+  ? [...NumberToArray<F>, ...NumberToArray<Current>]["length"] extends Target
     ? true
     : RecursiveAdd<Current, RT, Target>
   : false;
 
-export type TwoSum<T extends number[], U extends number> = T extends [infer F extends number, ...infer RT extends number[]]
+export type TwoSum<T extends number[], U extends number> = T extends [
+  infer F extends number,
+  ...infer RT extends number[]
+]
   ? RecursiveAdd<F, RT, U> extends false
     ? TwoSum<RT, U>
     : true
@@ -151,8 +158,11 @@ export type TwoSum<T extends number[], U extends number> = T extends [infer F ex
   Expect<Equal<UnionReplace<Function | Date | object, [[Date, string], [Function, undefined]]>, undefined | string | object>>,
 ]
  */
-export type UnionReplace<T, U extends [any, any][]> = U extends [infer F, ...infer RT extends [any, any][]]
-? F extends [infer ToBeReplaced, infer Replacer]
-  ? UnionReplace<Exclude<T, ToBeReplaced> | Replacer, RT>
-  : UnionReplace<T, RT>
-: T
+export type UnionReplace<T, U extends [any, any][]> = U extends [
+  infer F,
+  ...infer RT extends [any, any][]
+]
+  ? F extends [infer ToBeReplaced, infer Replacer]
+    ? UnionReplace<Exclude<T, ToBeReplaced> | Replacer, RT>
+    : UnionReplace<T, RT>
+  : T;
