@@ -4,6 +4,7 @@
 
 ## types.Assign type
 
+```typescript
 Example // case1 type Case1Target = { }
 
 type Case1Origin1 = { a: 'a' }
@@ -37,6 +38,7 @@ type Case3Answer = { a: 3 b: { b: 'b' } c: 'c2' d: true }
 type Case4Answer = { a: 1 b: \['b'\] }
 
 type cases = \[ Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case1Target, \[Case1Origin1, Case1Origin2, Case1Origin3\]<!-- -->&gt;<!-- -->, Case1Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case2Target, \[Case2Origin1, Case2Origin2\]<!-- -->&gt;<!-- -->, Case2Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case3Target, \[Case3Origin1, Case3Origin2\]<!-- -->&gt;<!-- -->, Case3Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case4Target, \['', 0\]<!-- -->&gt;<!-- -->, Case4Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, \]
+```
 
 <b>Signature:</b>
 
