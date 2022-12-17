@@ -304,7 +304,7 @@ type cases = [
 ]
 */
 export type IsAny<T> = Equal<any, T>;
-
+export type NotAny<T> = true extends IsAny<T> ? false : true;
 /*
 Example:
 type cases = [
@@ -417,6 +417,8 @@ export type ToNumber<
 export type Nullable<T extends Record<PropertyKey, unknown>> = {
   [K in keyof T]: T[K] | null;
 };
+
+export type NotEqual<X, Y> = true extends Equal<X, Y> ? false : true;
 
 /*
 Example
