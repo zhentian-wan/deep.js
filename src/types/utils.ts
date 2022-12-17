@@ -356,7 +356,11 @@ type cases = [
 ]
 */
 export type IsNever<T> = [T] extends [never] ? true : false;
-
+export type Expect<T extends true> = T;
+export type ExpectTrue<T extends true> = T;
+export type ExpectFalse<T extends false> = T;
+export type IsTrue<T extends true> = T;
+export type IsFalse<T extends false> = T;
 export type isNegative<T extends number> = NumberToString<T> extends `-${number}` ? true: false;
 
 /*
