@@ -326,6 +326,25 @@ export type IsTuple<T> = [T] extends [never]
 
 /*
 Example
+let x = 1
+let y = 1 as const
+
+type cases1 = [
+  Expect<Equal<IsInteger<1>, 1>>,
+  Expect<Equal<IsInteger<1.1>, never>>,
+  Expect<Equal<IsInteger<1.0>, 1>>,
+  Expect<Equal<IsInteger<typeof x>, never>>,
+  Expect<Equal<IsInteger<typeof y>, 1>>,
+]
+*/
+export type IsInteger<T> = `${T & number}` extends `${number}.${number}` 
+  ? never
+  : number extends T
+    ? never
+    : T;
+
+/*
+Example
 type cases = [
   Expect<Equal<IsNever<never>, true>>,
   Expect<Equal<IsNever<never | string>, false>>,
