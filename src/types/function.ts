@@ -16,6 +16,11 @@ export type AppendArgument<
   ? (...x: [...Args, A]) => RT
   : never;
 
+export type ExpectValidArgs<
+  FUNC extends (...args: any[]) => any,
+  ARGS extends any[],
+> = ARGS extends Parameters<FUNC> ? true : false;
+
 /*
 Example
 // Edge cases
