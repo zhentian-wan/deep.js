@@ -1,6 +1,9 @@
 import type { CamelizeWord } from "./string";
 
 export type Expect<T extends true> = T;
+export type ExpectExtends<VALUE, EXPECTED> = EXPECTED extends VALUE
+  ? true
+  : false;
 
 export type FalsyValues =
   | ""
