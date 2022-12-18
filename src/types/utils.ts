@@ -439,6 +439,10 @@ export type Maybe<T extends Record<PropertyKey, unknown>> =
   | T
   | null
   | undefined;
+  
+export type MergeInsertions<T> = T extends object
+  ? { [K in keyof T]: MergeInsertions<T[K]> }
+  : T;
 
 /*
 Example
