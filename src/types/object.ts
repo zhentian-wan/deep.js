@@ -1,6 +1,8 @@
-import type { Equal, UnionToIntersection } from "./utils";
+import type { Equal, UnionToIntersection, MergeInsertions } from "./utils";
 /* Object */
 
+
+export type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
 /**
  * Example
  * // case1
