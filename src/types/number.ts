@@ -107,3 +107,59 @@ type cases = [
 export type Trunc<N extends number | string> = `${N}` extends `${infer NUM}.${infer _}`
   ? `${NUM}`
   : `${N}`;
+
+
+/**
+ * Comparator<T, U>
+ * 
+ * Compare two number T, U, if T > U return Comparison.Greater
+ * else if T = U, return Comparison.Euqal
+ * if T < U, return Comparison.Lower
+ */ 
+/**
+ ```typescript
+ type cases = [
+  Expect<Equal<Comparator<5, 5>, Comparison.Equal>>,
+  Expect<Equal<Comparator<5, 6>, Comparison.Lower>>,
+  Expect<Equal<Comparator<5, 8>, Comparison.Lower>>,
+  Expect<Equal<Comparator<5, 0>, Comparison.Greater>>,
+  Expect<Equal<Comparator<-5, 0>, Comparison.Lower>>,
+  Expect<Equal<Comparator<0, 0>, Comparison.Equal>>,
+  Expect<Equal<Comparator<0, -5>, Comparison.Greater>>,
+  Expect<Equal<Comparator<5, -3>, Comparison.Greater>>,
+  Expect<Equal<Comparator<5, -7>, Comparison.Greater>>,
+  Expect<Equal<Comparator<-5, -7>, Comparison.Greater>>,
+  Expect<Equal<Comparator<-5, -3>, Comparison.Lower>>,
+  Expect<Equal<Comparator<-25, -30>, Comparison.Greater>>,
+  Expect<Equal<Comparator<15, -23>, Comparison.Greater>>,
+  Expect<Equal<Comparator<40, 37>, Comparison.Greater>>,
+  Expect<Equal<Comparator<-36, 36>, Comparison.Lower>>,
+  Expect<Equal<Comparator<27, 27>, Comparison.Equal>>,
+  Expect<Equal<Comparator<-38, -38>, Comparison.Equal>>,
+]
+```
+ */
+export enum Comparison {
+  Greater,
+  Equal,
+  Lower,
+}
+export type Negative<A extends number> = `${A}` extends `-${infer N extends number}` ? N : false;
+type Compare<A extends number, B extends number, C extends any[] = []> =
+  C['length'] extends A
+    ? Comparison.Lower
+    : C['length'] extends B
+      ? Comparison.Greater
+      : Compare<A, B, [...C, any]>;
+export type Comparator<A extends number, B extends number> =
+  A extends B
+    ? Comparison.Equal
+    : [Negative<A>, Negative<B>] extends [infer AA, infer BB]
+      ? [AA, BB] extends [false, false]
+        ? Compare<A, B>
+        : [AA, BB] extends [false, number]
+          ? Comparison.Greater
+          : [AA, BB] extends [number, false]
+            ? Comparison.Lower
+            : Compare<BB & number, AA & number>
+      : never;
