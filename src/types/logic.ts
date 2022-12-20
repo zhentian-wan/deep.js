@@ -1,3 +1,8 @@
+/**
+* And<T, U>
+*/
+export type And<B1 extends boolean, B2 extends boolean> = B1 extends true ? (B2 extends true ? true : false) : false;
+
 /*
 Example
 type cases = [
