@@ -1,4 +1,5 @@
 export * from "./array";
+export * from "./curry";
 export * from "./class";
 export * from "./exp";
 export * from "./function";
