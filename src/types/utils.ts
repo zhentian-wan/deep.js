@@ -1,5 +1,8 @@
 import type { CamelizeWord } from "./string";
 
+declare const brand: unique symbol;
+export type Brand<K, T> = T & {[brand]: K}
+
 export type Expect<T extends true> = T;
 export type ExpectExtends<VALUE, EXPECTED> = EXPECTED extends VALUE
   ? true
