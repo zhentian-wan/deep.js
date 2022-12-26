@@ -8,7 +8,13 @@
 type Absolute<T extends number | string | bigint> = `${T}` extends `-${infer S}` ? S : `${T}`;
 
 // @public (undocumented)
+type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
+
+// @public (undocumented)
 type All<T extends any[], U extends any = T[0]> = T extends [infer H, ...infer RT] ? Equal<H, U> extends true ? All<RT, U> : false : true;
+
+// @public
+type And<B1 extends boolean, B2 extends boolean> = B1 extends true ? (B2 extends true ? true : false) : false;
 
 // @public (undocumented)
 type AnyOf<T extends readonly any[]> = T extends [infer F, ...infer RT] ? F extends FalsyValues ? AnyOf<RT> : true : false;
@@ -38,6 +44,11 @@ type BEM<B extends string, E extends string[], M extends string[]> = M["length"]
 //
 // @public (undocumented)
 type BinaryToDecimal<S extends string, Result extends unknown[] = []> = S extends `${infer First extends number}${infer RT}` ? BinaryToDecimal<RT, [...GetTwice<Result>, ...NumberToArray<First>]> : Result["length"];
+
+// @public (undocumented)
+type Brand<K, T> = T & {
+    [brand]: K;
+};
 
 // Warning: (ae-forgotten-export) The symbol "ToCamelCase" needs to be exported by the entry point index.d.ts
 //
@@ -69,11 +80,31 @@ type ClassPublicKeys<C> = keyof C;
 // @public (undocumented)
 type Combinations<T extends string, U = T> = U extends T ? U | `${U}${Combinations<Exclude<T, U>>}` : never;
 
+// Warning: (ae-forgotten-export) The symbol "Compare" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type Comparator<A extends number, B extends number> = A extends B ? Comparison.Equal : [Negative<A>, Negative<B>] extends [infer AA, infer BB] ? [AA, BB] extends [false, false] ? Compare<A, B> : [AA, BB] extends [false, number] ? Comparison.Greater : [AA, BB] extends [number, false] ? Comparison.Lower : Compare<BB & number, AA & number> : never;
+
+// @public
+enum Comparison {
+    // (undocumented)
+    Equal = 1,
+    // (undocumented)
+    Greater = 0,
+    // (undocumented)
+    Lower = 2
+}
+
 // @public (undocumented)
 type ConcatString<T extends unknown[], U extends string, ACC extends string = ""> = T extends [infer F extends string, ...infer RT] ? ACC extends "" ? ConcatString<RT, U, `${F}`> : ConcatString<RT, U, `${ACC}${U}${F}`> : ACC;
 
 // @public (undocumented)
 type ConstructTuple<L extends number, ACC extends unknown[] = []> = L extends 0 ? [] : ACC["length"] extends L ? ACC : ConstructTuple<L, [...ACC, unknown]>;
+
+// @public (undocumented)
+type Debug<T> = {
+    [K in keyof T]: T[K];
+};
 
 // @public
 export function deepFreeze(obj: {
@@ -127,6 +158,9 @@ type DiscrimatedUnionToObject<T extends Record<PropertyKey, any>, U extends keyo
 type DropString<S, R extends string> = R extends "" ? S : S extends `${infer F}${infer RT}` ? F extends StringToUnion<R> ? DropString<RT, R> : `${F}${DropString<RT, R>}` : S;
 
 // @public (undocumented)
+function DynamicParamsCurrying<T extends any[], R>(fn: (...args: T) => R): T extends [] ? R : <P extends any[]>(...args: P) => T extends [...P, ...infer K3] ? ReturnType<typeof DynamicParamsCurrying<K3, R>> : R;
+
+// @public (undocumented)
 type EndsWith<T extends string, U extends string> = T extends `${string}${U}` ? true : false;
 
 // @public (undocumented)
@@ -141,10 +175,16 @@ type Equal<T, U> = (<P>(x: P) => P extends T ? 1 : 2) extends <P>(x: P) => P ext
 type Expect<T extends true> = T;
 
 // @public (undocumented)
+type ExpectExtends<VALUE, EXPECTED> = EXPECTED extends VALUE ? true : false;
+
+// @public (undocumented)
 type ExpectFalse<T extends false> = T;
 
 // @public (undocumented)
 type ExpectTrue<T extends true> = T;
+
+// @public (undocumented)
+type ExpectValidArgs<FUNC extends (...args: any[]) => any, ARGS extends any[]> = ARGS extends Parameters<FUNC> ? true : false;
 
 // @public (undocumented)
 type ExtractValuesOfTuple<T extends any[]> = T[keyof T & number];
@@ -320,6 +360,11 @@ type Merge<F extends Record<PropertyKey, any>, S extends Record<PropertyKey, any
 };
 
 // @public (undocumented)
+type MergeInsertions<T> = T extends object ? {
+    [K in keyof T]: MergeInsertions<T[K]>;
+} : T;
+
+// @public (undocumented)
 type MergeObject<T> = {
     [P in keyof T]: T[P];
 };
@@ -330,6 +375,16 @@ type MinusN<T extends number, N extends number, NACC extends unknown[] = []> = [
 // @public (undocumented)
 type MinusOne<T extends number, ARR extends unknown[] = []> = any extends never ? never : [...ARR, 1]['length'] extends T ? ARR['length'] : MinusOne<T, [...ARR, 1]>;
 
+// Warning: (ae-forgotten-export) The symbol "ParamType" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "Split" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "Pop" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "EachSum" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "GetRest" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ArrayMul" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type Multiply<A extends ParamType, B extends ParamType, SA extends number[] = Split_2<A>, SB extends number[] = Split_2<B>, Result extends string[] = [], Default extends string = '', SBL extends number = Pop_2<SB>> = Equal<`${A}`, '0'> extends true ? '0' : Equal<`${B}`, '0'> extends true ? '0' : SB extends [] ? EachSum<Result> : Multiply<never, never, SA, GetRest<SB>, [ArrayMul<SA, SBL, 0, Default>, ...Result], `0${Default}`>;
+
 // @public (undocumented)
 type Mutable<T extends object> = {
     -readonly [K in keyof T]: T[K];
@@ -339,6 +394,9 @@ type Mutable<T extends object> = {
 type MutableKeys<T> = keyof {
     [Key in keyof T as Equal<Pick<T, Key>, Readonly<Pick<T, Key>>> extends true ? never : Key]: T[Key];
 };
+
+// @public (undocumented)
+type Negative<A extends number> = `${A}` extends `-${infer N extends number}` ? N : false;
 
 // @public (undocumented)
 type NonEmptyArray<T> = [T, ...Array<T>];
@@ -524,6 +582,12 @@ type Subsequence<T extends any[]> = T extends [infer F, ...infer RT] ? Subsequen
 // @beta
 export function sum3(a: number, b: number, c: number): number;
 
+// Warning: (ae-forgotten-export) The symbol "SumArr" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "DigitArr" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type Sum_2<A extends string | number | bigint, B extends string | number | bigint> = SumArr<DigitArr<`${A}`>, DigitArr<`${B}`>>;
+
 // @public (undocumented)
 type ToNumber<S extends string, ACC extends unknown[] = []> = S extends `${number}` ? S extends `${ACC["length"]}` ? ACC["length"] : ToNumber<S, [...ACC, unknown]> : never;
 
@@ -608,12 +672,15 @@ declare namespace types {
         Unique,
         Without,
         Zip,
+        DynamicParamsCurrying,
         Properties,
         ClassPublicKeys,
         defineStore,
         GetRes,
         join,
         AppendArgument,
+        ExpectValidArgs,
+        And,
         If,
         InorderTraversal,
         Fibonacci,
@@ -622,6 +689,7 @@ declare namespace types {
         IsPalindrome,
         TwoSum,
         UnionReplace,
+        Multiply,
         Absolute,
         MinusOne,
         MinusN,
@@ -629,7 +697,11 @@ declare namespace types {
         GreaterThan,
         NumberRange,
         Trunc,
+        Comparison,
+        Negative,
+        Comparator,
         getProp,
+        Alike,
         Assign,
         AppendToObject,
         PropPath,
@@ -685,11 +757,15 @@ declare namespace types {
         Split,
         SnakeCase,
         TrimRight,
+        Sum_2 as Sum,
         UnionToIntersectionFn,
         GetLastUnion,
         UnionToTuple,
         TupleToUnion,
+        Brand,
+        Debug,
         Expect,
+        ExpectExtends,
         FalsyValues,
         Space,
         Camelize,
@@ -725,6 +801,7 @@ declare namespace types {
         Nullable,
         NotEqual,
         Maybe,
+        MergeInsertions,
         XOR
     }
 }

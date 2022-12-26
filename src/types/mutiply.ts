@@ -1,3 +1,5 @@
+import { Equal } from "./utils"
+import { MinusOne } from "./number"
 type ParamType = string | number | bigint
 
 type NumberToTuple<T extends number, R extends 0[] = []> = R['length'] extends T
@@ -22,11 +24,11 @@ type SingleSum<T extends number, D extends number> = [...NumberToTuple<T>, ...Nu
  * GetRest<[1, 2, 3]> // [1, 2]
  * GetRest<[1]> // []
  */
-type GetRest<T> = T extends [...infer R, infer L extends number]
+type GetRest<T> = T extends [...infer R, infer _L extends number]
   ? R
   : []
 
-type Pop<T> = T extends [...infer R, infer L extends number]
+type Pop<T> = T extends [...infer _R, infer L extends number]
   ? L
   : 0
 
@@ -34,7 +36,7 @@ type Pop<T> = T extends [...infer R, infer L extends number]
  * GetDigit<12> // 2
  * GetDigit<1> // 1
  */
-type GetDigit<T extends number> = `${T}` extends `${infer F extends number}${infer R extends number}`
+type GetDigit<T extends number> = `${T}` extends `${infer _F extends number}${infer R extends number}`
   ? R
   : T
 
@@ -42,7 +44,7 @@ type GetDigit<T extends number> = `${T}` extends `${infer F extends number}${inf
  * GetTens<12> // 1
  * GetTens<1> // 0
  */
-type GetTens<T extends number> = `${T}` extends `${infer F extends number}${infer R extends number}`
+type GetTens<T extends number> = `${T}` extends `${infer F extends number}${infer _R extends number}`
   ? F
   : 0
 
@@ -60,17 +62,12 @@ type ArraySum<
   : B extends []
     ? ArraySum<GetRest<A>, [], GetTens<SingleSum<SingleSum<AL, BL>, C>>, `${GetDigit<SingleSum<SingleSum<AL, BL>, C>>}${Result}`>
     : ArraySum<GetRest<A>, GetRest<B>, GetTens<SingleSum<SingleSum<AL, BL>, C>>, `${GetDigit<SingleSum<SingleSum<AL, BL>, C>>}${Result}`>
-    
+
 
 type Sum<
   A extends ParamType,
   B extends ParamType,
 > = ArraySum<Split<A>, Split<B>>
-
-
-type MinusOne<T extends number, Result extends 0[] = NumberToTuple<T>> = Result extends [infer F, ...infer R]
-  ? R['length']
-  : 0
 
 /**
  * SingleMultiply<1, 2> // 2
@@ -126,7 +123,7 @@ export type Multiply<
       : Multiply<never, never, SA, GetRest<SB>, [ArrayMul<SA, SBL, 0, Default>, ...Result], `0${Default}`>
 
 
-/* 
+/*
 type cases = [
   Expect<Equal<Multiply<2, 3>, '6'>>,
   Expect<Equal<Multiply<3, '5'>, '15'>>,

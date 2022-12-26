@@ -4,11 +4,18 @@
 
 ## types namespace
 
+## Enumerations
+
+|  Enumeration | Description |
+|  --- | --- |
+|  [Comparison](./deep.js.types.comparison.md) | \`\`\`<!-- -->typescript type cases = \[ Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->5, 5<!-- -->&gt;<!-- -->, Comparison.Equal<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->5, 6<!-- -->&gt;<!-- -->, Comparison.Lower<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->5, 8<!-- -->&gt;<!-- -->, Comparison.Lower<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->5, 0<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->-5, 0<!-- -->&gt;<!-- -->, Comparison.Lower<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->0, 0<!-- -->&gt;<!-- -->, Comparison.Equal<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->0, -5<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->5, -3<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->5, -7<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->-5, -7<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->-5, -3<!-- -->&gt;<!-- -->, Comparison.Lower<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->-25, -30<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->15, -23<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->40, 37<!-- -->&gt;<!-- -->, Comparison.Greater<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->-36, 36<!-- -->&gt;<!-- -->, Comparison.Lower<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->27, 27<!-- -->&gt;<!-- -->, Comparison.Equal<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Comparator<!-- -->&lt;<!-- -->-38, -38<!-- -->&gt;<!-- -->, Comparison.Equal<!-- -->&gt;<!-- -->&gt;<!-- -->, \] \`\`\` |
+
 ## Functions
 
 |  Function | Description |
 |  --- | --- |
 |  [defineStore(store)](./deep.js.types.definestore.md) |  |
+|  [DynamicParamsCurrying(fn)](./deep.js.types.dynamicparamscurrying.md) |  |
 |  [getProp(obj, path)](./deep.js.types.getprop.md) |  |
 |  [join(delimiter)](./deep.js.types.join.md) |  |
 |  [PromiseAll(values)](./deep.js.types.promiseall.md) |  |
@@ -18,13 +25,16 @@
 |  Type Alias | Description |
 |  --- | --- |
 |  [Absolute](./deep.js.types.absolute.md) |  |
+|  [Alike](./deep.js.types.alike.md) |  |
 |  [All](./deep.js.types.all.md) |  |
+|  [And](./deep.js.types.and.md) | And<!-- -->&lt;<!-- -->T, U<!-- -->&gt; |
 |  [AnyOf](./deep.js.types.anyof.md) |  |
 |  [AppendArgument](./deep.js.types.appendargument.md) |  |
 |  [AppendToObject](./deep.js.types.appendtoobject.md) |  |
 |  [Assign](./deep.js.types.assign.md) | <p>Example // case1 type Case1Target = { }</p><p>type Case1Origin1 = { a: 'a' }</p><p>type Case1Origin2 = { b: 'b' }</p><p>type Case1Origin3 = { c: 'c' }</p><p>type Case1Answer = { a: 'a' b: 'b' c: 'c' }</p><p>// case2 type Case2Target = { a: \[1, 2, 3\] }</p><p>type Case2Origin1 = { a: { a1: 'a1' } }</p><p>type Case2Origin2 = { b: \[2, 3, 3\] }</p><p>type Case2Answer = { a: { a1: 'a1' } b: \[2, 3, 3\] }</p><p>// case3</p><p>type Case3Target = { a: 1 b: \['b'\] }</p><p>type Case3Origin1 = { a: 2 b: { b: 'b' } c: 'c1' }</p><p>type Case3Origin2 = { a: 3 c: 'c2' d: true }</p><p>type Case3Answer = { a: 3 b: { b: 'b' } c: 'c2' d: true }</p><p>// case 4 type Case4Target = { a: 1 b: \['b'\] }</p><p>type Case4Answer = { a: 1 b: \['b'\] }</p><p>type cases = \[ Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case1Target, \[Case1Origin1, Case1Origin2, Case1Origin3\]<!-- -->&gt;<!-- -->, Case1Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case2Target, \[Case2Origin1, Case2Origin2\]<!-- -->&gt;<!-- -->, Case2Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case3Target, \[Case3Origin1, Case3Origin2\]<!-- -->&gt;<!-- -->, Case3Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Assign<!-- -->&lt;<!-- -->Case4Target, \['', 0\]<!-- -->&gt;<!-- -->, Case4Answer<!-- -->&gt;<!-- -->&gt;<!-- -->, \]</p> |
 |  [BEM](./deep.js.types.bem.md) |  |
 |  [BinaryToDecimal](./deep.js.types.binarytodecimal.md) |  |
+|  [Brand](./deep.js.types.brand.md) |  |
 |  [CamelCase](./deep.js.types.camelcase.md) |  |
 |  [Camelize](./deep.js.types.camelize.md) |  |
 |  [CamelizeWord](./deep.js.types.camelizeword.md) |  |
@@ -33,8 +43,10 @@
 |  [Chunk](./deep.js.types.chunk.md) |  |
 |  [ClassPublicKeys](./deep.js.types.classpublickeys.md) |  |
 |  [Combinations](./deep.js.types.combinations.md) |  |
+|  [Comparator](./deep.js.types.comparator.md) |  |
 |  [ConcatString](./deep.js.types.concatstring.md) |  |
 |  [ConstructTuple](./deep.js.types.constructtuple.md) |  |
+|  [Debug](./deep.js.types.debug.md) |  |
 |  [DeepMutable](./deep.js.types.deepmutable.md) |  |
 |  [DeepPartial](./deep.js.types.deeppartial.md) |  |
 |  [DeepPick](./deep.js.types.deeppick.md) |  |
@@ -46,8 +58,10 @@
 |  [Enum](./deep.js.types.enum.md) |  |
 |  [Equal](./deep.js.types.equal.md) |  |
 |  [Expect](./deep.js.types.expect.md) |  |
+|  [ExpectExtends](./deep.js.types.expectextends.md) |  |
 |  [ExpectFalse](./deep.js.types.expectfalse.md) |  |
 |  [ExpectTrue](./deep.js.types.expecttrue.md) |  |
+|  [ExpectValidArgs](./deep.js.types.expectvalidargs.md) |  |
 |  [ExtractValuesOfTuple](./deep.js.types.extractvaluesoftuple.md) |  |
 |  [FalsyValues](./deep.js.types.falsyvalues.md) |  |
 |  [Fibonacci](./deep.js.types.fibonacci.md) |  |
@@ -92,11 +106,14 @@
 |  [MapTypes](./deep.js.types.maptypes.md) |  |
 |  [Maybe](./deep.js.types.maybe.md) |  |
 |  [Merge](./deep.js.types.merge.md) |  |
+|  [MergeInsertions](./deep.js.types.mergeinsertions.md) |  |
 |  [MergeObject](./deep.js.types.mergeobject.md) |  |
 |  [MinusN](./deep.js.types.minusn.md) | Example Only when T &gt; N and T &amp; N are both positive value |
 |  [MinusOne](./deep.js.types.minusone.md) |  |
+|  [Multiply](./deep.js.types.multiply.md) |  |
 |  [Mutable](./deep.js.types.mutable.md) |  |
 |  [MutableKeys](./deep.js.types.mutablekeys.md) |  |
+|  [Negative](./deep.js.types.negative.md) |  |
 |  [NonEmptyArray](./deep.js.types.nonemptyarray.md) |  |
 |  [NotAny](./deep.js.types.notany.md) |  |
 |  [NotEqual](./deep.js.types.notequal.md) |  |
@@ -141,6 +158,7 @@
 |  [StringToUnion](./deep.js.types.stringtounion.md) |  |
 |  [SubKeys](./deep.js.types.subkeys.md) |  |
 |  [Subsequence](./deep.js.types.subsequence.md) |  |
+|  [Sum](./deep.js.types.sum.md) |  |
 |  [ToNumber](./deep.js.types.tonumber.md) |  |
 |  [ToPrimitive](./deep.js.types.toprimitive.md) |  |
 |  [ToUnion](./deep.js.types.tounion.md) | Example type cases = \[ Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Intersection<!-- -->&lt;<!-- -->\[\[1, 2\], \[2, 3\], \[2, 2\]\]<!-- -->&gt;<!-- -->, 2<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Intersection<!-- -->&lt;<!-- -->\[\[1, 2, 3\], \[2, 3, 4\], \[2, 2, 3\]\]<!-- -->&gt;<!-- -->, 2 \| 3<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Intersection<!-- -->&lt;<!-- -->\[\[1, 2\], \[3, 4\], \[5, 6\]\]<!-- -->&gt;<!-- -->, never<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Intersection<!-- -->&lt;<!-- -->\[\[1, 2, 3\], \[2, 3, 4\], 3\]<!-- -->&gt;<!-- -->, 3<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Intersection<!-- -->&lt;<!-- -->\[\[1, 2, 3\], 2 \| 3 \| 4, 2 \| 3\]<!-- -->&gt;<!-- -->, 2 \| 3<!-- -->&gt;<!-- -->&gt;<!-- -->, Expect<!-- -->&lt;<!-- -->Equal<!-- -->&lt;<!-- -->Intersection<!-- -->&lt;<!-- -->\[\[1, 2, 3\], 2, 3\]<!-- -->&gt;<!-- -->, never<!-- -->&gt;<!-- -->&gt;<!-- -->, \] |
