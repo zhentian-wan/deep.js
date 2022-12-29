@@ -375,6 +375,8 @@ export type IsFalse<T extends false> = T;
 export type isNegative<T extends number> =
   NumberToString<T> extends `-${number}` ? true : false;
 export type NumberToString<T extends number> = `${T}`;
+export type NotNil<T> = T extends {} ? true: false;
+export type IsNil<T> = T extends {} ? false: true;
 /*
 Example: ObjectToUnion
 interface Attributes {
