@@ -4,6 +4,10 @@ declare const brand: unique symbol;
 export type Brand<K, T> = T & {[brand]: K}
 export type Valid<T> = Brand<T, "Valid">;
 export type Debug<T> = { [K in keyof T]: T[K] };
+export type EnumLike = {
+  [k: string]: string | number;
+  [nu: number]: string;
+};
 export type Expect<T extends true> = T;
 export type ExpectExtends<VALUE, EXPECTED> = EXPECTED extends VALUE
   ? true
@@ -432,6 +436,10 @@ export type ToNumber<
 export type Nullable<T extends Record<PropertyKey, unknown>> = {
   [K in keyof T]: T[K] | null;
 };
+
+export type NeverByKeys<T, K extends keyof T = keyof T> = MergeObject<Omit<T, K> & {
+  [Key in keyof T as Key extends K ? Key : never]?: never;
+}>;
 
 export type NotEqual<X, Y> = true extends Equal<X, Y> ? false : true;
 
