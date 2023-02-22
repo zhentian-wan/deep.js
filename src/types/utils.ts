@@ -3,6 +3,11 @@ import type { CamelizeWord } from "./string";
 declare const brand: unique symbol;
 export type Brand<K, T> = T & {[brand]: K}
 export type Valid<T> = Brand<T, "Valid">;
+export declare type Try<A1 extends any, A2 extends any, Catch = never> = A1 extends A2 ? A1 : Catch;
+export declare type Narrowable = string | number | bigint | boolean;
+export declare type NarrowRaw<A> = (A extends [] ? [] : never) | (A extends Narrowable ? A : never) | ({
+    [K in keyof A]: A[K] extends Function ? A[K] : NarrowRaw<A[K]>;
+});
 export type Debug<T> = { [K in keyof T]: T[K] };
 export type EnumLike = {
   [k: string]: string | number;
@@ -307,8 +312,10 @@ type tests = [
   Expect<Equal<Identity<false>, false>>,
   Expect<Equal<Identity<null>, null>>
 ];
+function fn<T>(inputs: Identity<T>) {}
+fn([{name: 'apple', price: 1}])
 */
-export type Identity<T> = T;
+declare type Identity<A extends any> = Try<A, [], NarrowRaw<A>>;
 
 /*
 Example
