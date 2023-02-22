@@ -58,4 +58,5 @@ export function deepFreeze(obj: { [K: string]: Primitive | object }) {
 }
 
 export type Primitive = string | number | boolean | null;
+export declare type Narrowable = string | number | bigint | boolean;
 export { types };
