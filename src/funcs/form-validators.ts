@@ -2,14 +2,14 @@ import { expect, it } from 'vitest';
 import { Equal, Expect } from '../types/utils';
 
 const makeFormValidatorFactory =
-  <TValidators extends Record<string, (value: string) => string | undefined>>(
-    validators: TValidators
+  <TValidatorKeys extends string>(
+    validators: Record<TValidatorKeys, (value: string) => string | void>
   ) =>
-  <TConfig extends Record<string, Array<keyof TValidators>>>(
-    config: TConfig
+  <TConfigKeys extends string>(
+    config: Record<TConfigKeys, Array<TValidatorKeys>>
   ) => {
-    return <TValues extends Record<keyof TConfig, string>>(values: TValues) => {
-      const errors = {} as { [Key in keyof TValues]: string | undefined };
+    return (values: Record<TConfigKeys, string>) => {
+      const errors = {} as { [Key in TConfigKeys]: string | undefined };
 
       for (const key in config) {
         for (const validator of config[key]) {
