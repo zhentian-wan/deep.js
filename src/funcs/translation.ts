@@ -16,9 +16,9 @@ const translate = <
 >(
   translations: TTrans,
   key: TKey,
-  ...args: TDynamicParamKeys extends never
-    ? []
-    : [arg: Record<TDynamicParamKeys, string>]
+  ...args: TDynamicParamKeys extends string
+    ? [arg: Record<TDynamicParamKeys, string>]
+    : []
 ) => {
   const translation = translations[key];
   const params: any = args[0] || {};
