@@ -459,7 +459,7 @@ type tests = [
   Expect<Equal<Maybe<null>, null | undefined>>
 ];
 */
-export type Maybe<T extends Record<PropertyKey, unknown>> =
+export type Maybe<T extends {}> =
   | T
   | null
   | undefined;
