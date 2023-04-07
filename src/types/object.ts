@@ -97,8 +97,8 @@ type cases = [
   Expect<Equal<Assign<Case4Target, ['', 0]>, Case4Answer>>,
 ]
  */
-export type Assign<T extends Record<string, unknown>, U> = U extends object[] 
-  ? U extends [infer F, ...infer RT] 
+export type Assign<T extends Record<string, unknown>, U> = U extends object[]
+  ? U extends [infer F, ...infer RT]
     ? Assign<MergeObject<({
       [Key in keyof T as Key extends keyof F ? never: Key]: T[Key]
     } & {
@@ -155,7 +155,7 @@ type cases = [
 export type AppendToObject<
   T extends Record<PropertyKey, any>,
   U extends string | number | symbol,
-  V extends any
+  V
 > = MergeObject<
   T & {
     [Key in U]: V;
@@ -305,7 +305,7 @@ export type DeepReadonly<T extends Record<PropertyKey, any>> = T extends (
       readonly [Key in keyof T]: DeepReadonly<T[Key]>;
     };
 
-export type DeepPartial<T> = T extends Function
+export type DeepPartial<T> = T extends (...args: any[]) => void
   ? T
   : T extends Array<infer InferredArrayMember>
   ? DeepPartialArray<InferredArrayMember>
@@ -615,7 +615,7 @@ export type Merge<
 };
 
 /*
-Example: 
+Example:
 interface Model {
   name: string
   count: number
@@ -850,7 +850,7 @@ export type ObjectKeyPaths<
   T extends object,
   IsRoot extends boolean = true,
   K extends keyof T = keyof T
-> = 
+> =
 K extends string | number ?
   GenNode<K,IsRoot> | (T[K] extends object? `${GenNode<K,IsRoot>}${ObjectKeyPaths<T[K],false>}`:never)
   :never;
@@ -888,7 +888,7 @@ type cases = [
   Expect<Equal<IsRequiredKey<{ a: number; b?: string }, 'b' | 'a'>, false>>,
 ]
 */
-export type IsRequiredKey<T, K extends keyof T> = Equal<
+export type IsRequiredKey<T extends Record<PropertyKey, any>, K extends keyof T> = Equal<
   K,
   RequiredKeys<T>
 > extends true
