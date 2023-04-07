@@ -7,7 +7,7 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type AppendToObject<T extends Record<PropertyKey, any>, U extends string | number | symbol, V extends any> = MergeObject<T & {
+export declare type AppendToObject<T extends Record<PropertyKey, any>, U extends string | number | symbol, V> = MergeObject<T & {
     [Key in U]: V;
 }>;
 ```

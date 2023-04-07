@@ -22,5 +22,6 @@
 
 |  Type Alias | Description |
 |  --- | --- |
+|  [Narrowable](./deep.js.narrowable.md) |  |
 |  [Primitive](./deep.js.primitive.md) |  |
 

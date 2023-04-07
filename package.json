@@ -10,7 +10,8 @@
     "build": "tsc",
     "dev": "yarn build --watch --preserveWatchOutput",
     "lint": "eslint src --ext js,ts",
-    "test": "jest"
+    "test": "jest",
+    "docs": "npm run build && yarn api-extractor run --local && yarn api-documenter markdown -i temp -o docs"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.18.10",

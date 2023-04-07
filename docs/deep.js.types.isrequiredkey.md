@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type IsRequiredKey<T, K extends keyof T> = Equal<K, RequiredKeys<T>> extends true ? true : false;
+export declare type IsRequiredKey<T extends Record<PropertyKey, any>, K extends keyof T> = Equal<K, RequiredKeys<T>> extends true ? true : false;
 ```

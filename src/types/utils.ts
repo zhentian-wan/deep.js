@@ -1,12 +1,13 @@
+import { MergeObject } from "./object";
 import type { CamelizeWord } from "./string";
 
 declare const brand: unique symbol;
 export type Brand<K, T> = T & {[brand]: K}
 export type Valid<T> = Brand<T, "Valid">;
-export declare type Try<A1 extends any, A2 extends any, Catch = never> = A1 extends A2 ? A1 : Catch;
+export declare type Try<A1, A2, Catch = never> = A1 extends A2 ? A1 : Catch;
 export declare type Narrowable = string | number | bigint | boolean;
 export declare type NarrowRaw<A> = (A extends [] ? [] : never) | (A extends Narrowable ? A : never) | ({
-    [K in keyof A]: A[K] extends Function ? A[K] : NarrowRaw<A[K]>;
+    [K in keyof A]: A[K] extends (...args: any[]) => void ? A[K] : NarrowRaw<A[K]>;
 });
 export type Debug<T> = { [K in keyof T]: T[K] };
 export type EnumLike = {
@@ -165,12 +166,12 @@ export type Equal<T, U> = (<P>(x: P) => P extends T ? 1 : 2) extends <P>(
   ? true
   : false;
 /*
-Example:    
+Example:
 type cases = [
   Expect<Equal<BEM<'btn', ['price'], []>, 'btn__price'>>,
   Expect<Equal<BEM<'btn', ['price'], ['warning', 'success']>, 'btn__price--warning' | 'btn__price--success' >>,
   Expect<Equal<BEM<'btn', [], ['small', 'medium', 'large']>, 'btn--small' | 'btn--medium' | 'btn--large' >>,
-]    
+]
 */
 export type BEM<
   B extends string,
@@ -315,7 +316,7 @@ type tests = [
 function fn<T>(inputs: Identity<T>) {}
 fn([{name: 'apple', price: 1}])
 */
-declare type Identity<A extends any> = Try<A, [], NarrowRaw<A>>;
+declare type Identity<A> = Try<A, [], NarrowRaw<A>>;
 
 /*
 Example
@@ -387,8 +388,8 @@ export type IsFalse<T extends false> = T;
 export type isNegative<T extends number> =
   NumberToString<T> extends `-${number}` ? true : false;
 export type NumberToString<T extends number> = `${T}`;
-export type NotNil<T> = T extends {} ? true: false;
-export type IsNil<T> = T extends {} ? false: true;
+export type NotNil<T> = T extends object ? true: false;
+export type IsNil<T> = T extends object ? false: true;
 /*
 Example: ObjectToUnion
 interface Attributes {
@@ -459,11 +460,11 @@ type tests = [
   Expect<Equal<Maybe<null>, null | undefined>>
 ];
 */
-export type Maybe<T extends {}> =
+export type Maybe<T extends object> =
   | T
   | null
   | undefined;
-  
+
 export type MergeInsertions<T> = T extends object
   ? { [K in keyof T]: MergeInsertions<T[K]> }
   : T;

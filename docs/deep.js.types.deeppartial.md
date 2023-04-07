@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type DeepPartial<T> = T extends Function ? T : T extends Array<infer InferredArrayMember> ? DeepPartialArray<InferredArrayMember> : T extends object ? DeepPartialObject<T> : T | undefined;
+export declare type DeepPartial<T> = T extends (...args: any[]) => void ? T : T extends Array<infer InferredArrayMember> ? DeepPartialArray<InferredArrayMember> : T extends object ? DeepPartialObject<T> : T | undefined;
 ```

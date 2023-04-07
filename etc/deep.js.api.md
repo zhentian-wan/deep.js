@@ -23,7 +23,7 @@ type AnyOf<T extends readonly any[]> = T extends [infer F, ...infer RT] ? F exte
 type AppendArgument<Fn extends (...args: any[]) => void, A> = Fn extends (...args: infer Args) => infer RT ? (...x: [...Args, A]) => RT : never;
 
 // @public (undocumented)
-type AppendToObject<T extends Record<PropertyKey, any>, U extends string | number | symbol, V extends any> = MergeObject<T & {
+type AppendToObject<T extends Record<PropertyKey, any>, U extends string | number | symbol, V> = MergeObject<T & {
     [Key in U]: V;
 }>;
 
@@ -122,7 +122,7 @@ type DeepMutable<T extends Record<PropertyKey, any>> = T extends (...args: any[]
 // Warning: (ae-forgotten-export) The symbol "DeepPartialObject" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-type DeepPartial<T> = T extends Function ? T : T extends Array<infer InferredArrayMember> ? DeepPartialArray<InferredArrayMember> : T extends object ? DeepPartialObject<T> : T | undefined;
+type DeepPartial<T> = T extends (...args: any[]) => void ? T : T extends Array<infer InferredArrayMember> ? DeepPartialArray<InferredArrayMember> : T extends object ? DeepPartialObject<T> : T | undefined;
 
 // @public (undocumented)
 type DeepPick<T, U> = UnionToIntersection<PropPath<T, U>>;
@@ -169,7 +169,20 @@ type Enum<T extends readonly string[], N extends boolean = false> = {
 };
 
 // @public (undocumented)
+type EnumLike = {
+    [k: string]: string | number;
+    [nu: number]: string;
+};
+
+// @public (undocumented)
 type Equal<T, U> = (<P>(x: P) => P extends T ? 1 : 2) extends <P>(x: P) => P extends U ? 1 : 2 ? true : false;
+
+// @public (undocumented)
+type Exclusive<T extends Record<PropertyKey, unknown>, U extends Record<PropertyKey, unknown>> = (T & {
+    [k in Exclude<keyof U, keyof T>]?: never;
+}) | (U & {
+    [k in Exclude<keyof T, keyof U>]?: never;
+});
 
 // @public (undocumented)
 type Expect<T extends true> = T;
@@ -248,9 +261,6 @@ type GreaterThan<T extends number, U extends number, ACC extends unknown[] = []>
 type Head<T extends any[]> = T extends [infer HEAD, ...infer _] ? HEAD : never;
 
 // @public (undocumented)
-type Identity<T> = T;
-
-// @public (undocumented)
 type If<C extends boolean, T, F> = C extends true ? T : F;
 
 // @public (undocumented)
@@ -286,10 +296,13 @@ type isNegative<T extends number> = NumberToString<T> extends `-${number}` ? tru
 type IsNever<T> = [T] extends [never] ? true : false;
 
 // @public (undocumented)
+type IsNil<T> = T extends object ? false : true;
+
+// @public (undocumented)
 type IsPalindrome<T extends string | number> = Equal<`${T}`, Join<Reverse<Split<`${T}`, "">>, "">>;
 
 // @public (undocumented)
-type IsRequiredKey<T, K extends keyof T> = Equal<K, RequiredKeys<T>> extends true ? true : false;
+type IsRequiredKey<T extends Record<PropertyKey, any>, K extends keyof T> = Equal<K, RequiredKeys<T>> extends true ? true : false;
 
 // @public (undocumented)
 type IsTrue<T extends true> = T;
@@ -352,7 +365,7 @@ type MapTypes<T extends Record<PropertyKey, any>, R extends Record<"mapFrom" | "
 };
 
 // @public (undocumented)
-type Maybe<T extends Record<PropertyKey, unknown>> = T | null | undefined;
+type Maybe<T extends object> = T | null | undefined;
 
 // @public (undocumented)
 type Merge<F extends Record<PropertyKey, any>, S extends Record<PropertyKey, any>> = {
@@ -396,7 +409,28 @@ type MutableKeys<T> = keyof {
 };
 
 // @public (undocumented)
+export type Narrowable = string | number | bigint | boolean;
+
+// @public (undocumented)
+type Narrowable_2 = string | number | bigint | boolean;
+
+// @public (undocumented)
+type NarrowRaw<A> = (A extends [] ? [] : never) | (A extends Narrowable_2 ? A : never) | ({
+    [K in keyof A]: A[K] extends (...args: any[]) => void ? A[K] : NarrowRaw<A[K]>;
+});
+
+// @public (undocumented)
 type Negative<A extends number> = `${A}` extends `-${infer N extends number}` ? N : false;
+
+// @public (undocumented)
+type NeverByKeys<T, K extends keyof T = keyof T> = MergeObject<Omit<T, K> & {
+    [Key in keyof T as Key extends K ? Key : never]?: never;
+}>;
+
+// @public
+type NoInfer<A extends any> = [
+A
+][A extends any ? 0 : never];
 
 // @public (undocumented)
 type NonEmptyArray<T> = [T, ...Array<T>];
@@ -406,6 +440,9 @@ type NotAny<T> = true extends IsAny<T> ? false : true;
 
 // @public (undocumented)
 type NotEqual<X, Y> = true extends Equal<X, Y> ? false : true;
+
+// @public (undocumented)
+type NotNil<T> = T extends object ? true : false;
 
 // @public (undocumented)
 type Nullable<T extends Record<PropertyKey, unknown>> = {
@@ -603,6 +640,13 @@ type ToPrimitive<T extends Record<PropertyKey, any>> = {
 // @public
 type ToUnion<T> = T extends any[] ? T[number] : T;
 
+// @public
+type Transpose<M extends number[][], R = M['length'] extends 0 ? [] : M[0]> = {
+    [X in keyof R]: {
+        [Y in keyof M]: X extends keyof M[Y] ? M[Y][X] : never;
+    };
+};
+
 // @public (undocumented)
 type Trim<S extends string> = S extends `${Space}${infer Word}` ? Trim<Word> : S extends `${infer Word}${Space}` ? Trim<Word> : S;
 
@@ -614,6 +658,9 @@ type TrimRight<S extends string> = S extends `${infer Left}${Space}` ? TrimRight
 
 // @public (undocumented)
 type Trunc<N extends number | string> = `${N}` extends `${infer NUM}.${infer _}` ? `${NUM}` : `${N}`;
+
+// @public (undocumented)
+type Try<A1, A2, Catch = never> = A1 extends A2 ? A1 : Catch;
 
 // @public (undocumented)
 type TupleToNestedObject<T extends any[], U> = T extends [
@@ -668,6 +715,7 @@ declare namespace types {
         Unshift,
         Subsequence,
         TupleToObject,
+        Transpose,
         TupleToNestedObject,
         Unique,
         Without,
@@ -680,6 +728,7 @@ declare namespace types {
         join,
         AppendArgument,
         ExpectValidArgs,
+        NoInfer,
         And,
         If,
         InorderTraversal,
@@ -704,6 +753,7 @@ declare namespace types {
         Alike,
         Assign,
         AppendToObject,
+        Exclusive,
         PropPath,
         DeepPick,
         CapitalizeNestObjectKeys,
@@ -763,7 +813,12 @@ declare namespace types {
         UnionToTuple,
         TupleToUnion,
         Brand,
+        Valid,
+        Try,
+        Narrowable_2 as Narrowable,
+        NarrowRaw,
         Debug,
+        EnumLike,
         Expect,
         ExpectExtends,
         FalsyValues,
@@ -784,7 +839,6 @@ declare namespace types {
         Intersection,
         UnionToIntersection,
         ExtractValuesOfTuple,
-        Identity,
         IsAny,
         NotAny,
         IsTuple,
@@ -796,9 +850,12 @@ declare namespace types {
         IsFalse,
         isNegative,
         NumberToString,
+        NotNil,
+        IsNil,
         ObjectToUnion,
         ToNumber,
         Nullable,
+        NeverByKeys,
         NotEqual,
         Maybe,
         MergeInsertions,
@@ -833,6 +890,9 @@ type Unshift<T extends any[], U> = [U, ...T];
 
 // @public (undocumented)
 type UpperLetterUnion = Uppercase<LowerLetterUnion>;
+
+// @public (undocumented)
+type Valid<T> = Brand<T, "Valid">;
 
 // @public (undocumented)
 type Without<T extends any[], U extends any[] | any> = T extends [

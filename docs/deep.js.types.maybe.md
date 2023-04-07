@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type Maybe<T extends Record<PropertyKey, unknown>> = T | null | undefined;
+export declare type Maybe<T extends object> = T | null | undefined;
 ```
