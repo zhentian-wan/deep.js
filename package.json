@@ -29,5 +29,8 @@
   "volta": {
     "node": "16.17.0",
     "yarn": "1.22.19"
+  },
+  "dependencies": {
+    "ts-toolbelt": "^9.6.0"
   }
 }
