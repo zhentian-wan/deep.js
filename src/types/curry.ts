@@ -1,10 +1,11 @@
 
-export declare function DynamicParamsCurrying<T extends any[], R>(fn: (...args: T) => R):  
+export declare function DynamicParamsCurrying<T extends any[], R>(fn: (...args: T) => R):
 T extends [] ? R : // returns R if no params is needed
-  <P extends any[]>(...args: P) => 
+  <P extends any[]>(...args: P) =>
     T extends [...P, ...infer K3] ? // check does P & K3 extends T, basically checking is P fully T
       ReturnType<typeof DynamicParamsCurrying<K3, R>> : // Pass in K3 and T to check is K3 = T
     R;
+
 
 /* _____________ Test Cases _____________ */
 
