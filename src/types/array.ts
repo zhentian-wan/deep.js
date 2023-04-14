@@ -256,6 +256,12 @@ export type First<T extends any[]> = T extends [infer First, ...infer _]
   ? First
   : never;
 
+// check array or tuple has at least one element
+export type hasElement<T extends any[]> = '0' extends keyof T
+  ? true
+  : false;
+
+
 /*
 Example
 const tesla = ['tesla', 'model 3', 'model X', 'model Y'] as const
