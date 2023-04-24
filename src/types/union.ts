@@ -38,3 +38,9 @@ type cases = [
 ]
 */
 export type TupleToUnion<T extends any[]> = T extends [infer F, ...infer RT] ? F | TupleToUnion<RT> : never;
+
+export type UnionOfObjects<T extends object> = {
+  [K in keyof T]: {
+    type: K;
+  } & T[K];
+}[keyof T];
