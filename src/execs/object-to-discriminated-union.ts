@@ -1,19 +1,19 @@
-import {Expect, Euqal} from "../types/utils"
+import {Expect, Equal} from "../types/utils"
 
 interface Attributes {
     id: string;
     email: string;
     username: string;
   }
-  
+
   type MutuallyExclusive<T> = {
     [Key in keyof T]: {
       [P in Key]: T[P]
     }
   }[keyof T];
-  
+
   type ExclusiveAttributes = MutuallyExclusive<Attributes>;
-  
+
   type tests = [
     Expect<
       Equal<
@@ -30,4 +30,3 @@ interface Attributes {
       >
     >,
   ];
-  
