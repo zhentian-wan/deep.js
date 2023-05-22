@@ -1,6 +1,7 @@
 import type { Equal, UnionToIntersection, MergeInsertions } from "./utils";
 /* Object */
 
+export type OverrideProps<T, TOverriden> = Omit<T, keyof TOverridden> & TOverridden;
 
 export type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
 /**
