@@ -482,3 +482,15 @@ export type XOR<N extends boolean, M extends boolean> = [N, M] extends [
   : [N, M] extends [false, false]
   ? false
   : true;
+
+export type OverloadedReturnType<T> =
+  T extends { (...args: any[]) : infer R; (...args: any[]) : infer R; (...args: any[]) : infer R ; (...args: any[]) : infer R } ? R  :
+  T extends { (...args: any[]) : infer R; (...args: any[]) : infer R; (...args: any[]) : infer R } ? R  :
+  T extends { (...args: any[]) : infer R; (...args: any[]) : infer R } ? R  :
+  T extends (...args: any[]) => infer R ? R : any
+
+export type OverloadedParameters<T> =
+  T extends { (...args: infer A1) : any; (...args: infer A2) : any; (...args: infer A3) : any ; (...args: infer A4) : any } ? A1|A2|A3|A4  :
+  T extends { (...args: infer A1) : any; (...args: infer A2) : any; (...args: infer A3) : any } ? A1|A2|A3 :
+  T extends { (...args: infer A1) : any; (...args: infer A2) : any } ? A1|A2  :
+  T extends (...args: infer A) => any ? A : any
