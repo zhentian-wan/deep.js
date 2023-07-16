@@ -585,6 +585,21 @@ export type PartialByKeys<T, K extends keyof T = keyof T> = MergeObject<
 
 export type MergeObject<T> = { [P in keyof T]: T[P] };
 
+/**
+type cases = [
+  Expect<Equal<PublicType<{ a: number }>, { a: number }>>,
+  Expect<Equal<PublicType<{ _b: string | bigint }>, {}>>,
+  Expect<Equal<PublicType<{ readonly c?: number }>, { readonly c?: number }>>,
+  Expect<Equal<PublicType<{ d: string; _e: string }>, { d: string }>>,
+  Expect<Equal<PublicType<{ _f: () => bigint[] }>, {}>>,
+  Expect<Equal<PublicType<{ g: '_g' }>, { g: '_g' }>>,
+  Expect<Equal<PublicType<{ __h: number; i: unknown }>, { i: unknown }>>,
+]
+*/
+export type PublicType<T extends object> = {
+  [Key in keyof T as Key extends `_${string}` ? never: Key]: T[Key]
+}
+
 /*
 Example
 type Foo = {
