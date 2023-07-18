@@ -9,7 +9,7 @@
 */
 export type CartesianProduct<T, U> = T extends infer T1
   ? U extends infer U1
-    ? [T1, U1] | CartesianProduct<Exclude<T, T1>, Exclude<U, U1>>
+    ? [T1, U1]
     : never
   : never;
 
