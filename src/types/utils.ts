@@ -494,3 +494,27 @@ export type OverloadedParameters<T> =
   T extends { (...args: infer A1) : any; (...args: infer A2) : any; (...args: infer A3) : any } ? A1|A2|A3 :
   T extends { (...args: infer A1) : any; (...args: infer A2) : any } ? A1|A2  :
   T extends (...args: infer A) => any ? A : any
+
+/*
+Example:
+type Icon = "home" | "settings" | "about";
+type ButtonVariant = "primary" | "secondary" | "tertiary";
+type LooseIcon = LooseAutocomplete<Icon>;
+type LooseButtonVariant = LooseAutocomplete<ButtonVariant>;
+
+export const icons: LooseIcon[] = [
+  "home",
+  "settings",
+  "any-other-string",
+  // I should get autocomplete if I add a new item here!
+];
+
+export const buttonVariants: LooseButtonVariant[] = [
+  "primary",
+  "secondary",
+  "tertiary",
+  "any-other-string",
+  // I should get autocomplete if I add a new item here!
+];
+*/
+export type LooseAutocomplete<T> = T | (string & {});
