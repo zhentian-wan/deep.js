@@ -38,8 +38,8 @@ export const Test = () => {
   );
 };
 */
-export type ToUndefined<T> = Partial<Record<keyof T, undefined>>;
-export type AllOrNothing<T> = T | ToUndefined<T>;
+export type ToUndefined<T extends object> = Partial<Record<keyof T, undefined>>;
+export type AllOrNothing<T extends object> = T | ToUndefined<T>;
 
 export type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
 /**
