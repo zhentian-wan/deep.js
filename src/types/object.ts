@@ -3,6 +3,44 @@ import type { Equal, UnionToIntersection, MergeInsertions } from "./utils";
 
 export type OverrideProps<T, TOverriden> = Omit<T, keyof TOverridden> & TOverridden;
 
+/*
+Example
+export type InputProps = AllOrNothing<{
+  value: string;
+  onChange: ChangeEventHandler;
+}> & {
+  label: string;
+};
+
+export const Input = ({ label, ...props }: InputProps) => {
+  return (
+    <div>
+      <label>
+        {label}
+        <input {...props} />
+      </label>
+    </div>
+  );
+};
+
+export const Test = () => {
+  return (
+    <div>
+      <Input label="Greeting" value="Hello" onChange={() => {}} />
+      <Input label="Greeting" />
+
+      {// @ts-expect-error }
+      <Input label="Greeting" value="Hello" />
+
+      {// @ts-expect-error }
+      <Input label="Greeting" onChange={() => {}} />
+    </div>
+  );
+};
+*/
+export type ToUndefined<T> = Partial<Record<keyof T, undefined>>;
+export type AllOrNothing<T> = T | ToUndefined<T>;
+
 export type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
 /**
  * Example
