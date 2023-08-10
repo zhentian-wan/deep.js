@@ -38,6 +38,7 @@ export const Test = () => {
   );
 };
 */
+// extends object doesn't resolve array issue
 export type ToUndefined<T extends object> = Partial<Record<keyof T, undefined>>;
 export type AllOrNothing<T extends object> = T | ToUndefined<T>;
 
