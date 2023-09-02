@@ -1,6 +1,7 @@
 import type { Equal, UnionToIntersection, MergeInsertions } from "./utils";
 /* Object */
 
+// Example https://www.cnblogs.com/Answer1215/p/17674089.html
 export type DistributiveOmit<T, TOmitted extends PropertyKey> = T extends any
   ? Omit<T, TOmitted>
   : never;
