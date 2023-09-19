@@ -518,3 +518,14 @@ export const buttonVariants: LooseButtonVariant[] = [
 ];
 */
 export type LooseAutocomplete<T> = T | (string & {});
+
+/**
+ * Example
+ * type Example1 = WidenLiteral<"abc"> // string
+   type Example2 = WidenLiteral<true> // boolean
+   type Example3 = WidenLiteral<"abc" | 35> // string | number
+
+   // If it's not a literal, return as it is
+   type Example4 = WidenLiteral<{name: "abc"}> //{name: "abc"}
+ */
+export type WidenLiteral<T> = T extends string | number | boolean ? ReturnType<T["valueOf"]> : T;
