@@ -1,6 +1,11 @@
 import type { Equal, NumberToArray } from "./utils";
 import type { Split } from "./string";
 import type { Reverse, Join } from "./array";
+
+type JSONPrimitive = string | number | boolean | null;
+type JSONObject = {[key: string]: JSONValue};
+type JSONArray = JSONValue[];
+export type JSONValue = JSONPrimitive | JSONObject | JSONObject;
 /*
 Example:
 const tree1 = {
