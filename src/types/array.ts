@@ -370,6 +370,8 @@ makeEnum([]);
 */
 export type NonEmptyArray<T> = [T, ...Array<T>];
 
+export type NestedNumber = number | NestedNumber[];
+
 /*
 Example
 type cases = [
