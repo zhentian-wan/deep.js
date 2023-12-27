@@ -2,6 +2,21 @@ import type { Equal, NumberToArray } from "./utils";
 import type { Split } from "./string";
 import type { Reverse, Join } from "./array";
 
+/*
+Example
+declare const u: UnionBuilder;
+
+const result = u
+  .add<string>()
+  .add<number>()
+  .add<boolean>()
+  .fold() // string | number | boolean
+*/
+export interface UnionBuilder<T = never> {
+  add: <NewValue>() => UnionBuilder<T | NewValue>,
+  fold: () => T
+};
+
 type JSONPrimitive = string | number | boolean | null;
 type JSONObject = {[key: string]: JSONValue};
 type JSONArray = JSONValue[];
