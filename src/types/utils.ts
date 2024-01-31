@@ -1,6 +1,7 @@
 import { MergeObject } from "./object";
 import type { CamelizeWord } from "./string";
 
+export type AnyPropertyKey = keyof any;
 declare const brand: unique symbol;
 export type Brand<K, T> = T & {[brand]: K}
 export type Valid<T> = Brand<T, "Valid">;
