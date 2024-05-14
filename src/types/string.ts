@@ -68,6 +68,12 @@ export type CapitalizeWords<
     : CapitalizeWords<REST, First, `${ACC}${Uppercase<First>}`> // pre is symbol, current char should be uppercased
   : ACC;
 
+export type LastChar<T extends string> =  T extends `${infer First}${infer Rest}` 
+    ? Rest extends ""
+      ? First
+      : LastChar<Rest>
+    : never;
+
 /*
 Example
 type cases = [
