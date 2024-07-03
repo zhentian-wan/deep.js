@@ -1,7 +1,7 @@
 import type { Equal, UnionToIntersection, MergeInsertions } from "./utils";
 /* Object */
-
-export type EmptyObject = Record<PropertyKey, never>
+declare const tag: unique symbol;
+export type EmptyObject = {[tag]?: never}; // Record<PropertyKey, never>
 
 // Example https://www.cnblogs.com/Answer1215/p/17674089.html
 export type DistributiveOmit<T, TOmitted extends PropertyKey> = T extends any
