@@ -1,6 +1,12 @@
 import { MergeObject } from "./object";
 import type { CamelizeWord } from "./string";
 
+export type DistributiveOmit<T, K extends PropertyKey> = T extends any
+  ? Omit<T, K>
+  : never;
+export type DistributivePick<T, K extends PropertyKey> = T extends any
+  ? Pick<T, K>
+  : never;
 export type AnyPropertyKey = keyof any;
 declare const brand: unique symbol;
 export type Brand<K, T> = T & {[brand]: K}
