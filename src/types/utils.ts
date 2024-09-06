@@ -35,6 +35,15 @@ export type FalsyValues =
   | undefined
   | null;
 export type Space = " " | "\n" | "\t";
+export type Result<TResult, TError> =
+  | {
+      success: true;
+      data: TResult;
+    }
+  | {
+      success: false;
+      error: TError;
+    };
 
 /*
 Example
