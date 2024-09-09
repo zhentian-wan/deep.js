@@ -1,6 +1,7 @@
 import { MergeObject } from "./object";
 import type { CamelizeWord } from "./string";
 
+export type BanType<T, E> = T extends E ? never : T;
 export type DistributiveOmit<T, K extends PropertyKey> = T extends any
   ? Omit<T, K>
   : never;
