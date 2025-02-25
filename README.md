@@ -3,7 +3,7 @@ A light weight Javascript/Typescript library for nested object operations
 
 ## Types
 
-[Docs](https://zhentian-wan.github.io/deep.js/deep.js.types.html)
+[Util type collection](https://zhentian-wan.github.io/deep.js/deep.js.types.html)
 
 ## Typescript library setup
 
